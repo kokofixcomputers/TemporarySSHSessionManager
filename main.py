@@ -3,9 +3,19 @@ import handler
 import requests
 import sqlite3
 import base64
+import configurationlib
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
+
+REQUIRE_AUTH = True if not config.get("REQUIRE_AUTH") else config.get("REQUIRE_AUTH")
+
+def authenticated(session):
+    if REQUIRE_AUTH:
+        return session.get('username') is not None
+    return True
 
 def create_database():
     conn = sqlite3.connect('containers.db')
@@ -30,14 +40,14 @@ def create_database():
 
 @app.route('/')
 def home():
-    if 'username' in session:
+    if authenticated():
         return render_template('home.html')
     else:
         return redirect(url_for('auth'))
 
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
-    if not 'username' in session:
+    if not authenticated:
         return jsonify({"error": "You are not logged in."})
     name, username, password, port = handler.create_container()
     if name is not None:

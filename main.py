@@ -118,8 +118,7 @@ def delete_containers():
     id = request.args.get('id')
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    c.execute("DELETE FROM containers WHERE name=? AND user=?",
-                  [(id, session['username'])])
+    c.execute("DELETE FROM containers WHERE name=? AND user=?",(id, session['username']))
     handler.delete_container(id)
     conn.commit()
     conn.close()

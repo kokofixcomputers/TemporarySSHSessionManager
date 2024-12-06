@@ -70,52 +70,51 @@ def auth():
 
 @app.route('/auth/callback')
 def auth_callback():
-    # Print incoming request arguments for debugging
-    print(f"Received args: {request.args}")  # Log incoming arguments
     code = request.args.get('session')
-    
     if code:
-        print(f"Session code found: {code}")  # Print the session code
-        # Process the code and retrieve the user's username
         response = requests.get(f'https://kokoauth.kokodev.cc/api/v1/get-user-info?session={code}')
-        
         if response.status_code == 200:
             user_info = response.json()
             username = user_info.get('email')
-            print(f"Username retrieved: {username}")  # Print the username
-            
-            # Store the username in the database
             if username:
                 conn = sqlite3.connect('containers.db')
                 c = conn.cursor()
                 c.execute("SELECT username FROM users WHERE username=?", (username,))
-                
                 if c.fetchone() is None:
                     c.execute("INSERT INTO users (username) VALUES (?)", (username,))
-                
                 c.execute("INSERT INTO session (user, session) VALUES (?, ?)", (username, code))
                 conn.commit()
                 conn.close()
-                
                 session['username'] = username
                 session['session'] = code
-                
                 return redirect(url_for('home'))
-    
-    print("No valid session code found; redirecting to auth.")  # Print warning message
     return redirect(url_for('auth'))
 
-
-@app.route('/logout')
-def logout():
+@app.route('/get_user_containers')
+def get_user_containers():
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    c.execute("DELETE FROM session WHERE session=?", (session['session'],))
+    c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (session['username'],))
+    containers = c.fetchall()
+    conn.close()
+    return jsonify([{"name": container[0], "username": container[1],
+                    "password": container[2], "port": container[4]}
+                   for container in containers])
+
+@app.route('/delete_containers', methods=['DELETE'])
+def delete_containers():
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
+    names = request.form.getlist('names[]')
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    c.executemany("DELETE FROM containers WHERE name=? AND user=?",
+                  [(name, session['username']) for name in names])
     conn.commit()
     conn.close()
-    session.pop('username', None)
-    session.pop('session', None)
-    return redirect(url_for('home'))
+    return jsonify({"success": True})
 
 create_database()
 app.run(host='0.0.0.0', port=2271, debug=True)

@@ -33,7 +33,7 @@ def create_container():
         "PASSWORD_ACCESS": "true",
         "USER_PASSWORD": password,
         "USER_NAME": username,
-        "WELCOME_MESSAGE": "Welcome to your temp enviroment. SSH access is enabled with your user password."
+        "WELCOME_MESSAGE": "Welcome to your temp environment. SSH access is enabled with your user password."
     }
 
     # Create and run the container
@@ -50,9 +50,18 @@ def create_container():
         return None, None, None, None
     time.sleep(5)
 
-
     print(f"Container {container.name} created and running.")
     print(f"Generated Username: {username}")
     print(f"Generated Password: {password}")
     print(f"Mapped Host Port: {host_port} to Container Port: 2222")
     return container.name, username, password, host_port
+
+def delete_container(name):
+    try:
+        client = docker.from_env()
+        container = client.containers.get(name)
+        container.remove(force=True)
+    except:
+        return None
+    print(f"Container {name} deleted.")
+    return True

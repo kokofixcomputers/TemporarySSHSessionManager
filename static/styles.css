@@ -3,9 +3,9 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-}
-
-.container {
+  }
+  
+  .container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
@@ -13,29 +13,49 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-}
-
-h1 {
+  }
+  
+  h1 {
     margin-bottom: 20px;
-}
-
-button {
+  }
+  
+  button {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-button:hover {
+  }
+  
+  button:hover {
     background-color: #0056b3;
-}
-
-.result {
+  }
+  
+  .result {
     margin-top: 20px;
     padding: 10px;
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;
-}
+  }
+  
+  .container-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .container-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .container-list li button {
+    float: right;
+    margin-left: 10px;
+  }
+  

@@ -42,7 +42,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       let html = '<ul class="container-list">';
       containers.forEach(container => {
         html += `<li>
-                  <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password</strong> ${container.password}
+                  <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
                   <button id="delete-btn-${container.id}" class="delete-btn">Delete</button>
                 </li>`;
       });
@@ -72,7 +72,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           let html = '<ul class="container-list">';
           data.forEach(container => {
             html += `<li>
-                      <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}
+                      <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
                       <button id="delete-btn-${container.id}" class="delete-btn">Delete</button>
                     </li>`;
           });

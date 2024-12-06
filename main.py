@@ -90,21 +90,26 @@ def auth_callback():
                 return redirect(url_for('home'))
     return redirect(url_for('auth'))
 
-@app.route('/get_user_containers')
+@app.route('/get_user_containers', methods=['GET'])
 def get_user_containers():
-    if not authenticated(session):
-        return jsonify({"error": "You are not logged in."}), 401
-    conn = sqlite3.connect('containers.db')
-    c = conn.cursor()
-    c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (session['username'],))
-    containers = c.fetchall()
-    conn.close()
+    user = session.get('username')
+    if user is None:
+        return jsonify([]), 401
+    try:
+        conn = sqlite3.connect('containers.db')
+        c = conn.cursor()
+        c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (user,))
+        containers = c.fetchall()
+        conn.close()
+    except sqlite3.Error as e:
+        print(e)
+        return jsonify([]), 500
+
     if containers:
-        return jsonify([{"name": container[0], "username": container[1],
-                    "password": container[2], "port": container[4]}
-                   for container in containers])
+        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3]} for container in containers])
     else:
-        return jsonify({})
+        return jsonify([])
+
 
 @app.route('/delete_containers', methods=['DELETE'])
 def delete_containers():

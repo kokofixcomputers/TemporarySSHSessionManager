@@ -111,7 +111,7 @@ def get_user_containers():
         return jsonify([])
 
 
-@app.route('/delete_containers', methods=['DELETE'])
+@app.route('/delete_container', methods=['DELETE'])
 def delete_containers():
     if not authenticated(session):
         return jsonify({"error": "You are not logged in."}), 401

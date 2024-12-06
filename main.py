@@ -10,7 +10,10 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
 
-REQUIRE_AUTH = True if not config.get("REQUIRE_AUTH") else config.get("REQUIRE_AUTH")
+try:
+    REQUIRE_AUTH = config.get()["REQUIRE_AUTH"]
+except:
+    REQUIRE_AUTH = True
 
 def authenticated(session):
     if REQUIRE_AUTH:

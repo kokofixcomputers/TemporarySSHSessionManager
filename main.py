@@ -99,9 +99,12 @@ def get_user_containers():
     c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (session['username'],))
     containers = c.fetchall()
     conn.close()
-    return jsonify([{"name": container[0], "username": container[1],
+    if containers:
+        return jsonify([{"name": container[0], "username": container[1],
                     "password": container[2], "port": container[4]}
                    for container in containers])
+    else:
+        return jsonify({})
 
 @app.route('/delete_containers', methods=['DELETE'])
 def delete_containers():

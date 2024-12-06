@@ -115,11 +115,12 @@ def get_user_containers():
 def delete_containers():
     if not authenticated(session):
         return jsonify({"error": "You are not logged in."}), 401
-    names = request.form.getlist('names[]')
+    id = request.args.get('id')
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    c.executemany("DELETE FROM containers WHERE name=? AND user=?",
-                  [(name, session['username']) for name in names])
+    c.execute("DELETE FROM containers WHERE name=? AND user=?",
+                  [(id, session['username'])])
+    handler.delete_container(id)
     conn.commit()
     conn.close()
     return jsonify({"success": True})

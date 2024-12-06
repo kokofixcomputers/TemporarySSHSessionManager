@@ -1,5 +1,8 @@
 document.getElementById('generateSessionBtn').addEventListener('click', function() {
     const xhr = new XMLHttpRequest();
+    document.getElementById('result').innerHTML = `
+        <p>Generating session... Do not click the above button again. This might take a few minutes.</p>
+    `;
     xhr.open('POST', '/create_container', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 

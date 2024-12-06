@@ -60,7 +60,7 @@ def create_container_route():
         conn.commit()
         conn.close()
     base_url_no_scheme = request.url_root.replace(request.scheme + '://', '', 1).rstrip('/')
-    return jsonify({"name": name, "username": username, "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
+    return jsonify({"name": name, "username": username, "hostname": base_url_no_scheme, "port": f"{port}", "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
 
 @app.route('/auth')
 def auth():

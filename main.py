@@ -43,14 +43,14 @@ def create_database():
 
 @app.route('/')
 def home():
-    if authenticated():
+    if authenticated(session):
         return render_template('home.html')
     else:
         return redirect(url_for('auth'))
 
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
-    if not authenticated:
+    if not authenticated(session):
         return jsonify({"error": "You are not logged in."})
     name, username, password, port = handler.create_container()
     if name is not None:

@@ -40,11 +40,13 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     const containers = JSON.parse(data.containers);
     if (containers.length > 0) {
       let html = '<ul class="container-list">';
+      let containernametodelete = '';
       containers.forEach(container => {
+        containernametodelete = container.name;
         html += `<li>
-                  <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                  <button id="delete-btn-${container.id}" class="delete-btn">Delete</button>
-                </li>`;
+                    <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
+                    <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+                  </li>`;
       });
       html += '</ul>';
       containersDiv.innerHTML = html;
@@ -53,8 +55,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       const deleteBtns = document.getElementsByClassName('delete-btn');
       for (let i = 0; i < deleteBtns.length; i++) {
         deleteBtns[i].addEventListener('click', function () {
-          const containerId = this.id.split('-')[2];
-          deleteContainer(containerId);
+          deleteContainer(containernametodelete);
         });
       }
     } else {
@@ -72,9 +73,9 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           let html = '<ul class="container-list">';
           data.forEach(container => {
             html += `<li>
-                      <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-                    </li>`;
+                        <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
+                        <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+                      </li>`;
             const containernametodelete = container.name;
           });
           html += '</ul>';
@@ -99,7 +100,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
   
   function deleteContainer(containernametodelete) {
     if (confirm('Are you sure you want to delete this container?')) {
-      fetch(`/delete_container?id=${containernametodelete}`, { method: 'DELETE' })
+      fetch(`/delete_container?name=${containernametodelete}`, { method: 'DELETE' })
         .then(response => {
           if (response.ok) {
             displayResult({ containers: JSON.stringify([]) });

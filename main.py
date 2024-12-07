@@ -97,7 +97,7 @@ app.secret_key = config.get()['APP_SECRET']
 @app.route('/')
 def home():
     if authenticated(session):
-        return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']))
+        return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']), admin=is_admin(session['username']))
     else:
         return redirect(url_for('auth'))
 
@@ -187,6 +187,27 @@ def delete_containers():
     c = conn.cursor()
     c.execute("DELETE FROM containers WHERE name=? AND user=?",(id, session['username']))
     handler.delete_container(id)
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True})
+
+@app.route('/admin')
+def admin():
+    if not authenticated(session):
+        return redirect(url_for('auth'))
+    if not is_admin(session['username']):
+        return redirect(url_for('home'))
+    return render_template('admin.html', username=session['username'])
+
+@app.route('/admin/danger/session/clear', methods=['DELETE'])
+def clear_sessions():
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
+    if not is_admin(session['username']):
+        return jsonify({"error": "You are not authorized to clear sessions."}), 403
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM session")
     conn.commit()
     conn.close()
     return jsonify({"success": True})

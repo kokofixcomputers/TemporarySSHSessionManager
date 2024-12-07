@@ -9,7 +9,11 @@
   <body>
     <div class="container">
       <h1>SSH Temporary Session Generator</h1>
-      <p>Logged in as {{ username }}</p><button id="logoutButton" class="redbutton">Logout</button>
+      <p>Logged in as {{ username }}</p>
+      {% if admin %}
+      <a href="/admin">Admin Panel</a>
+      {% endif %}
+      <button id="logoutButton" class="redbutton">Logout</button>
       {% if authorized %}
         <p>You are authorized to generate SSH sessions.</p>
         <button id="generateSessionBtn">Generate SSH Session</button>

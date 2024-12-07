@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSH Temporary Session Generator - Admin</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>SSH Temporary Session Generator</h1>
+      <p>Logged in as {{ username }}</p><button id="logoutButton" class="redbutton">Logout</button>
+
+      <div id="containers" class="result">
+        <h3>All Containers:</h3>
+      </div>
+      <br>
+      <div id="admin_actions" class="actions">
+        <h3>Admin Actions:</h3>
+        <button id="delete_session_button" class="redbutton">Delete all Login Session on the panel (this will logout all users and admins including you!)</button>
+        <div id="messages">
+
+        </div>
+      </div>
+    </div>
+    <script src="/static/admin.js"></script>
+  </body>
+</html>

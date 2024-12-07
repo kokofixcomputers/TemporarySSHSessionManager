@@ -60,6 +60,14 @@ body {
     border-radius: 5px;
     background-color: #f9f9f9;
   }
+
+  .actions {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
   
   .container-list {
     list-style: none;

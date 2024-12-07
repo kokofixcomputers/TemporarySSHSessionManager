@@ -29,4 +29,5 @@ def init():
     config.save()['ALLOW_ADMIN_TO_ACCESS_USER_CONTAINERS'] = True
     config.save()['APP_SECRET'] = str(app_string)
     config.save()['DEBUG_MODE'] = False
+    config.save()['PORT'] = 2271
     config.save()

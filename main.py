@@ -203,4 +203,4 @@ def logout():
     return redirect(url_for('home'))
 
 create_database()
-app.run(host='0.0.0.0', port=2271, debug=DEBUG)
+app.run(host='0.0.0.0', port=config.get()['PORT'], debug=DEBUG)

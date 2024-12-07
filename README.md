@@ -36,3 +36,7 @@ Here is all the configuration keys and their description:
 | `REQUIRE_AUTH` | If set to `true`, the user will be redirected to kokoauth for login. **DO NOT TURN OFF IN PRODUCTION** | `true` |
 | `ALLOW_ALL_VALID_KOKOAUTH_ACCOUNTS_TO_CREATE_SESSIONS` | If set to `true`, all valid kokoauth accounts will be able to create sessions. **NOT RECOMMENDED as it allows anyone to create sessions** | `true` |
 | `ALLOWED_KOKOAUTH_ACCOUNTS_EMAIL` | A list of kokoauth accounts email address that are allowed to create sessions. (ONLY IF `ALLOW_ALL_VALID_KOKOAUTH_ACCOUNTS_TO_CREATE_SESSIONS` is set to `false`) **RECOMMENDED** | `` |
+| `APP_SECRET` | The secret key for the app used for encrypting sessions. **DO NOT SHARE WITH OTHERS** | <randomly generated> |
+| `ADMIN_KOKOAUTH_ACCOUNT_EMAIL_ADDRESS` | The list of email addresses of admins. | `[]` |
+| `DEBUG_MODE` | If set to `true`, the app will run in debug mode. **NOT RECOMMENDED FOR PRODUCTION USE** | `false` |
+| `PORT` | The port the app will run on. | `2271` |

@@ -26,6 +26,10 @@ except:
     CONFIGURED = False
     print(colors.fg.green + "Configuration file created. Please restart the application." + colors.reset)
     exit(0)
+    
+DEBUG = config.get()['DEBUG_MODE']
+if DEBUG:
+    print(colors.fg.yellow + "Debug mode enabled." + colors.reset)
 
 try:
     REQUIRE_AUTH = config.get()["REQUIRE_AUTH"]
@@ -36,7 +40,13 @@ def is_authorized(email):
     if config.get()['ALLOW_ALL_VALID_KOKOAUTH_ACCOUNTS_TO_CREATE_SESSIONS']:
         return True
     ALLOWED_EMAILS = config.get()["ALLOWED_KOKOAUTH_ACCOUNTS_EMAIL"]
+    if is_admin(email):
+        return True
     return email in ALLOWED_EMAILS
+
+def is_admin(email):
+    ADMIN_EMAILS = config.get()["ADMIN_KOKOAUTH_ACCOUNT_EMAIL_ADDRESS"]
+    return email in ADMIN_EMAILS
 
 def authenticated(session):
     if REQUIRE_AUTH:
@@ -48,7 +58,16 @@ def authenticated(session):
         return session is not None
     return True
 
+def debug_print(message, color=""):
+    if color == "":
+        reset = ""
+    else:
+        reset = colors.reset
+    if DEBUG:
+        print(color + message + reset)
+
 def create_database():
+    debug_print("Creating database if not exists...", colors.fg.green)
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS containers
@@ -118,21 +137,31 @@ def auth_callback():
                 session['username'] = username
                 session['session'] = code
                 return redirect(url_for('home'))
+            else:
+                debug_print("Error: Username does not persist from kokoauth.", colors.fg.red)
+        else:
+            debug_print("Error: Authentication failed.", colors.fg.red)
+    else:
+        debug_print("Error: Authentication failed.", colors.fg.red)
     return redirect(url_for('auth'))
 
 @app.route('/get_user_containers', methods=['GET'])
 def get_user_containers():
     user = session.get('username')
-    if user is None:
+    if authenticated(session):
         return jsonify([]), 401
+        
     try:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
-        c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (user,))
+        if config.get()['ALLOW_ADMIN_TO_ACCESS_USER_CONTAINERS'] and is_admin(user):
+            c.execute("SELECT name, username, password, port FROM containers")
+        else:
+            c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (user,))
         containers = c.fetchall()
         conn.close()
     except sqlite3.Error as e:
-        print(e)
+        debug_print(f"Error while fetching user containers: {e}", colors.fg.red)
         return jsonify([]), 500
 
     if containers:
@@ -145,6 +174,7 @@ def get_user_containers():
 def delete_containers():
     if not authenticated(session):
         return jsonify({"error": "You are not logged in."}), 401
+    debug_print(f"Deleting container with id: {request.args.get('id')}", colors.fg.green)
     id = request.args.get('id')
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
@@ -166,4 +196,4 @@ def logout():
     return redirect(url_for('home'))
 
 create_database()
-app.run(host='0.0.0.0', port=2271, debug=False)
+app.run(host='0.0.0.0', port=2271, debug=DEBUG)

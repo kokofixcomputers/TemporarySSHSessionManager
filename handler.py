@@ -63,5 +63,4 @@ def delete_container(name):
         container.remove(force=True)
     except:
         return None
-    print(f"Container {name} deleted.")
     return True

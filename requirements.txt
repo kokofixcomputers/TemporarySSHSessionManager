@@ -3,3 +3,4 @@ printedcolors
 requests
 flask
 docker
+waitress

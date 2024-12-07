@@ -3,6 +3,7 @@ import handler
 import requests
 import sqlite3
 import base64
+from waitress import serve
 import configurationlib
 import time
 import configuration_manager
@@ -224,4 +225,8 @@ def logout():
     return redirect(url_for('home'))
 
 create_database()
-app.run(host='0.0.0.0', port=config.get()['PORT'], debug=DEBUG)
+if DEBUG:
+    app.run(host='0.0.0.0', port=config.get()['PORT'], debug=DEBUG)
+else:
+    print("Server started on port " + str(config.get()['PORT']))
+    serve(app, host='0.0.0.0', port=config.get()['PORT'])

@@ -1,14 +1,22 @@
 document.getElementById('generateSessionBtn').addEventListener('click', function () {
+    const generateSessionBtn = document.getElementById('generateSessionBtn'); // Replace 'myInput' with your specific element's ID
+
+    // Check if the element is disabled
+    if (generateSessionBtn.disabled) {
+        return; // Exit the function if the element is disabled
+    }
     const xhr = new XMLHttpRequest();
     document.getElementById('result').innerHTML = `
           <p>Generating session... Do not click the above button again. This might take a few minutes.</p>
       `;
+    document.getElementById("generateSessionBtn").disabled = true;
     xhr.open('POST', '/create_container', true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
   
     xhr.onload = function () {
       if (xhr.status >= 200 && xhr.status < 300) {
         const response = JSON.parse(xhr.responseText);
+        document.getElementById("generateSessionBtn").disabled = false;
         displayResult(response);
       } else {
         console.error('Error:', xhr.responseText);

@@ -4,6 +4,7 @@ import requests
 import sqlite3
 import base64
 import configurationlib
+import time
 import configuration_manager
 import printedcolors
 
@@ -102,6 +103,7 @@ def home():
 
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
+    time.sleep(5)
     if not authenticated(session):
         return jsonify({"error": "You are not logged in."}), 401
     if not is_authorized(session['username']):

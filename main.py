@@ -4,20 +4,48 @@ import requests
 import sqlite3
 import base64
 import configurationlib
+import configuration_manager
+import printedcolors
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+colors = printedcolors.Color
+
 config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
+detect_already_configured = configurationlib.Instance("DELETE_THIS_FILE_TO_RESET_CONFIGURATION.py", format=configurationlib.Format.PYTHON)
+
+print(colors.fg.cyan + "Temporary SSH Session Manager" + colors.reset)
+
+try:
+    CONFIGURED = detect_already_configured.get()['CONFIGURED']
+except:
+    print(colors.fg.red + "Configuration file not found. Creating one..." + colors.reset)
+    print(colors.fg.green + "Using default configuration." + colors.reset)
+    configuration_manager.init()
+    CONFIGURED = False
+    print(colors.fg.green + "Configuration file created. Please restart the application." + colors.reset)
+    exit(0)
 
 try:
     REQUIRE_AUTH = config.get()["REQUIRE_AUTH"]
 except:
     REQUIRE_AUTH = True
+    
+def is_authorized(email):
+    if config.get()['ALLOW_ALL_VALID_KOKOAUTH_ACCOUNTS_TO_CREATE_SESSIONS']:
+        return True
+    ALLOWED_EMAILS = config.get()["ALLOWED_KOKOAUTH_ACCOUNTS_EMAIL"]
+    return email in ALLOWED_EMAILS
 
 def authenticated(session):
     if REQUIRE_AUTH:
-        return session.get('username') is not None
+        conn = sqlite3.connect('containers.db')
+        c = conn.cursor()
+        c.execute("SELECT session FROM session WHERE session=?", (session['session'],))
+        session = c.fetchone()
+        conn.close()
+        return session is not None
     return True
 
 def create_database():
@@ -44,14 +72,16 @@ def create_database():
 @app.route('/')
 def home():
     if authenticated(session):
-        return render_template('home.html')
+        return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']))
     else:
         return redirect(url_for('auth'))
 
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
     if not authenticated(session):
-        return jsonify({"error": "You are not logged in."})
+        return jsonify({"error": "You are not logged in."}), 401
+    if not is_authorized(session['username']):
+        return jsonify({"error": "You are not authorized to create containers."}), 403
     name, username, password, port = handler.create_container()
     if name is not None:
         conn = sqlite3.connect('containers.db')
@@ -124,5 +154,16 @@ def delete_containers():
     conn.close()
     return jsonify({"success": True})
 
+@app.route('/logout')
+def logout():
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM session WHERE session=?", (session['session'],))
+    conn.commit()
+    conn.close()
+    session.pop('username', None)
+    session.pop('session', None)
+    return redirect(url_for('home'))
+
 create_database()
-app.run(host='0.0.0.0', port=2271, debug=True)
+app.run(host='0.0.0.0', port=2271, debug=False)

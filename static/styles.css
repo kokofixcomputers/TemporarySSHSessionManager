@@ -31,6 +31,19 @@ body {
   button:hover {
     background-color: #0056b3;
   }
+
+  .redbutton {
+    padding: 10px 20px;
+    background-color: #ff5e5e !important;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .redbutton:hover {
+    background-color: #ff3d3d !important;
+  }
   
   .result {
     margin-top: 20px;

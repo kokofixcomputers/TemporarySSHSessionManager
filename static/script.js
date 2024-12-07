@@ -115,4 +115,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         });
     }
   }
-  
+document.getElementById('logoutButton').addEventListener('click', function () {
+
+    // Redirect users to the logout page
+    window.location.href = '/logout';
+});

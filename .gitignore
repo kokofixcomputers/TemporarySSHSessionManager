@@ -1,3 +1,5 @@
 /__pycache__/
 /.history/
-containers.db
+/containers.db
+/config.json
+/DELETE_THIS_FILE_TO_RESET_CONFIGURATION.py

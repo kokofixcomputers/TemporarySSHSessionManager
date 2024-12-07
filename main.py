@@ -49,18 +49,13 @@ def authenticated(session):
     if REQUIRE_AUTH:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
-        print(session['session'])
-        print("finish")
         try:
             c.execute("SELECT session FROM session WHERE session=?", (session['session'],))
         except:
-            print("error")
+            debug_print("Session not found in database.", colors.fg.red)
             conn.close()
             return False
         session = c.fetchone()
-        print(session)
-        print(session is not None)
-        print("finish")
         conn.close()
         return session is not None
     return True
@@ -159,7 +154,7 @@ def auth_callback():
 def get_user_containers():
     user = session.get('username')
     if not authenticated(session):
-        return "UNAUTHENTICATED AND GET OUTA HERE", 401
+        return "UNAUTHENTICATED", 401
         
     try:
         conn = sqlite3.connect('containers.db')

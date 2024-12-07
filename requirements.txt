@@ -1,0 +1,5 @@
+configurationlib
+printedcolors
+requests
+flask
+docker

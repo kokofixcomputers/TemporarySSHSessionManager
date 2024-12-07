@@ -7,9 +7,6 @@ import configurationlib
 import configuration_manager
 import printedcolors
 
-app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
 colors = printedcolors.Color
 
 config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
@@ -52,8 +49,18 @@ def authenticated(session):
     if REQUIRE_AUTH:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
-        c.execute("SELECT session FROM session WHERE session=?", (session['session'],))
+        print(session['session'])
+        print("finish")
+        try:
+            c.execute("SELECT session FROM session WHERE session=?", (session['session'],))
+        except:
+            print("error")
+            conn.close()
+            return False
         session = c.fetchone()
+        print(session)
+        print(session is not None)
+        print("finish")
         conn.close()
         return session is not None
     return True
@@ -87,6 +94,9 @@ def create_database():
                ''')
     conn.commit()
     conn.close()
+    
+app = Flask(__name__)
+app.secret_key = config.get()['APP_SECRET']
 
 @app.route('/')
 def home():
@@ -148,8 +158,8 @@ def auth_callback():
 @app.route('/get_user_containers', methods=['GET'])
 def get_user_containers():
     user = session.get('username')
-    if authenticated(session):
-        return jsonify([]), 401
+    if not authenticated(session):
+        return "UNAUTHENTICATED AND GET OUTA HERE", 401
         
     try:
         conn = sqlite3.connect('containers.db')

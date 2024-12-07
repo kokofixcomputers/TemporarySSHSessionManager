@@ -2,7 +2,7 @@
 A temporary SSH session manager.
 
 ## Why would you need this?
-Sometimes you have apps or services you need to test. Or just commands that you want to play with and maybe have to possibility to ruin your system. Using a temporary SSH session manager you can do that without having to worry about the consequences. Powered by Docker.
+Sometimes you have apps or services you need to test. Or just commands that you want to play with and maybe have the possibility to ruin your system. Using a temporary SSH session manager you can do that without having to worry about the consequences. Powered by Docker.
 
 ## Installation
 

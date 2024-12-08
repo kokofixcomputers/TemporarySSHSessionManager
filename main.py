@@ -1,8 +1,10 @@
-from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for, send_file
 import handler
 import requests
 import sqlite3
 import base64
+import server
+from urllib.parse import urlparse
 from waitress import serve
 import configurationlib
 import time
@@ -26,14 +28,35 @@ except:
     print(colors.fg.green + "Configuration file created. Please restart the application." + colors.reset)
     exit(0)
     
-DEBUG = config.get()['DEBUG_MODE']
+
+try:    
+    DEBUG = config.get()['DEBUG_MODE']
+except:
+    print(colors.fg.red + "Error: Configuration missing. Things may go very wrong." + colors.reset)
 if DEBUG:
     print(colors.fg.yellow + "Debug mode enabled." + colors.reset)
+    
+def debug_print(message, color=""):
+    if color == "":
+        reset = ""
+    else:
+        reset = colors.reset
+    if DEBUG:
+        print(color + message + reset)
+
+debug_print("Loading configuration...", colors.fg.green)
 
 try:
     REQUIRE_AUTH = config.get()["REQUIRE_AUTH"]
 except:
-    REQUIRE_AUTH = True
+    debug_print("Error: Configuration missing. Things may go very wrong.", colors.fg.red)
+    REQUIRE_AUTH = True # To avoid errors
+    
+debug_print("Configuration loaded.", colors.fg.green)
+
+debug_print("Initializing websocker server...", colors.fg.green)
+server.start()
+debug_print("Websocket server initialized.", colors.fg.green)
     
 def is_authorized(email):
     if config.get()['ALLOW_ALL_VALID_KOKOAUTH_ACCOUNTS_TO_CREATE_SESSIONS']:
@@ -61,14 +84,6 @@ def authenticated(session):
         conn.close()
         return session is not None
     return True
-
-def debug_print(message, color=""):
-    if color == "":
-        reset = ""
-    else:
-        reset = colors.reset
-    if DEBUG:
-        print(color + message + reset)
 
 def create_database():
     debug_print("Creating database if not exists...", colors.fg.green)
@@ -109,6 +124,12 @@ def create_container_route():
         return jsonify({"error": "You are not logged in."}), 401
     if not is_authorized(session['username']):
         return jsonify({"error": "You are not authorized to create containers."}), 403
+    # Assuming request.url_root is defined
+    url = request.url_root
+    parsed_url = urlparse(url)
+
+    # Constructing the base URL without scheme and port
+    base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
     name, username, password, port = handler.create_container()
     if name is not None:
         conn = sqlite3.connect('containers.db')
@@ -116,7 +137,6 @@ def create_container_route():
         c.execute("INSERT INTO containers (name, username, password, user, port) VALUES (?, ?, ?, ?, ?)", (name, username, password, session['username'], port))
         conn.commit()
         conn.close()
-    base_url_no_scheme = request.url_root.replace(request.scheme + '://', '', 1).rstrip('/')
     return jsonify({"name": name, "username": username, "hostname": base_url_no_scheme, "port": f"{port}", "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
 
 @app.route('/auth')
@@ -124,6 +144,7 @@ def auth():
     base_url = url_for('auth_callback', _external=True)
     encoded_data = base64.b64encode(base_url.encode()).decode()
     return redirect("https://kokoauth.kokodev.cc/auth?name=TemporarySSHSessionManager&callback=" + encoded_data)
+
 
 @app.route('/auth/callback')
 def auth_callback():
@@ -152,6 +173,49 @@ def auth_callback():
     else:
         debug_print("Error: Authentication failed.", colors.fg.red)
     return redirect(url_for('auth'))
+
+@app.route('/agent/handshake')
+def agent_handshake():
+    # TODO: Add port and scheme changing from config
+    return jsonify({"message": "OK", "code": 200, "port": 8765, "scheme": "ws"})
+
+@app.route('/agent/download')
+def download_agent():
+    # Assuming request.url_root is defined
+    url = request.url_root
+    parsed_url = urlparse(url)
+
+    # Constructing the base URL without scheme and port
+    base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
+
+    return '''import asyncio
+import websockets
+import requests
+import subprocess
+import os
+
+host = "'''+base_url_no_scheme+'''"
+
+async def listen_for_commands():
+    uri = scheme + "://" + host + port
+    try:
+        async with websockets.connect(uri) as websocket:
+            while True:
+                command = await websocket.recv()
+                print(f"{command}")
+    except websockets.exceptions.ConnectionClosedError:
+                print("Agent disconnected. Reconnecting...")
+
+if __name__ == "__main__":
+    response = requests.get(host + "/agent/handshake").json()
+    if response['message'] == "OK" and response['code'] == 200:
+        # Awesome! Ready to connect.
+        port = int(response['port'])
+        scheme = response['scheme']
+    else:
+        print("Error: Agent handshake failed.")
+        exit(1)
+    asyncio.run(listen_for_commands())'''
 
 @app.route('/get_user_containers', methods=['GET'])
 def get_user_containers():
@@ -226,6 +290,7 @@ def logout():
 
 create_database()
 if DEBUG:
+    debug_print("WARNING: DEBUG mode is enabled. Non-Production WSGI server will be used.", colors.fg.yellow)
     app.run(host='0.0.0.0', port=config.get()['PORT'], debug=DEBUG)
 else:
     print("Server started on port " + str(config.get()['PORT']))

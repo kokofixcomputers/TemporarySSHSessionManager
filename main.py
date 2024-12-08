@@ -55,7 +55,6 @@ except:
 debug_print("Configuration loaded.", colors.fg.green)
 
 debug_print("Initializing websocker server...", colors.fg.green)
-server.start()
 debug_print("Websocket server initialized.", colors.fg.green)
     
 def is_authorized(email):

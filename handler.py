@@ -33,7 +33,7 @@ def create_container():
         "PASSWORD_ACCESS": "true",
         "USER_PASSWORD": password,
         "USER_NAME": username,
-        "WELCOME_MESSAGE": "Welcome to your temporary environment. PLEASE REFRAIN FROM USING CONFIDENTIAL INFORMATION IN THIS ENVIROMENT.\n Admins can see and connect to this container.\nPlease also refrain from using this environment for anything illegal or unethical. Thank you for your cooperation.\n\nTemporary SSH Server made by kokofixcomputers"
+        "WELCOME_MESSAGE": "\033[36mWelcome to your temporary environment.\033[0m \033[1mPLEASE REFRAIN FROM USING CONFIDENTIAL INFORMATION IN THIS ENVIROMENT.\033[0m\nAdmins can see and connect to this container.\n\033[33mPlease also refrain from using this environment for anything illegal or unethical.\033[0m Thank you for your cooperation.\n\nTemporary SSH Server made by kokofixcomputers\n\n\n\033[1mWARNING: By using this environment you agree not to use this container for anything illegal or unehtical.\n\n\033[0m",
     }
 
     # Create and run the container

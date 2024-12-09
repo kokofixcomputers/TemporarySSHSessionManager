@@ -18,6 +18,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         const response = JSON.parse(xhr.responseText);
         document.getElementById("generateSessionBtn").disabled = false;
         displayResult(response);
+        refreshContainers();
       } else {
         console.error('Error:', xhr.responseText);
         document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
@@ -105,13 +106,47 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         document.getElementById('containers').innerHTML = '<p>Error fetching containers. Please try again.</p>';
       });
   });
+
+  function refreshContainers() {
+    fetch('/get_user_containers')
+      .then(response => response.json())
+      .then(data => {
+        const containersDiv = document.getElementById('containers');
+        if (data.length > 0) {
+          let html = '<ul class="container-list">';
+          data.forEach(container => {
+            html += `<li>
+                      <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
+                      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+                    </li>`;
+          });
+          html += '</ul>';
+          containersDiv.innerHTML = html;
+  
+          // Add event listeners to delete buttons
+          const deleteBtns = document.getElementsByClassName('delete-btn');
+          for (let i = 0; i < deleteBtns.length; i++) {
+            deleteBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              deleteContainer(containerId);
+            });
+          }
+        } else {
+          containersDiv.innerHTML = '<p>No containers assigned.</p>';
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching containers:', error);
+        document.getElementById('containers').innerHTML = '<p>Error fetching containers. Please try again.</p>';
+      });
+  };
   
   function deleteContainer(containerId) {
     if (confirm('Are you sure you want to delete this container?')) {
       fetch(`/delete_container?id=${containerId}`, { method: 'DELETE' })
         .then(response => {
           if (response.ok) {
-            displayResult({ containers: JSON.stringify([]) });
+            refreshContainers();
           } else {
             console.error('Error deleting container:', response.statusText);
             alert('Error deleting container. Please try again.');

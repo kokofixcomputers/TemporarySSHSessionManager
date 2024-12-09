@@ -68,6 +68,7 @@
     margin-top: 20px;
     padding: 10px;
     display: flex;
+    overflow: hidden;
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;

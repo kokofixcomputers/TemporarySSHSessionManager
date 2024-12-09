@@ -158,3 +158,36 @@
   .connection-detail button:hover {
       background-color: #ff3d3d; /* Darker red on hover */
   }
+  /* Popup Styles */
+  .popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+  }
+
+  .popup-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centered vertically */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px; /* Set a width for the popup */
+  }
+
+  .close-popup {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close-popup:hover,
+  .close-popup:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }

@@ -183,58 +183,51 @@ document.getElementById('logoutButton').addEventListener('click', function () {
 var modal = document.getElementById("myModal");
 var span = document.getElementsByClassName("close")[0];
 
-// Function to open modal and fetch connection details
-// Function to open a new connection details container
-function openConnectionDetails(containerId) {
-  // Fetch connection details based on the container ID
-  fetch(`/get_connection_details?id=${containerId}`)
-      .then(response => response.json())
-      .then(data => {
-          // Create a new div for connection details
-          const detailContainer = document.createElement('div');
-          detailContainer.className = 'connection-detail'; // Add a class for styling
-          
-          // Populate the new container with connection details
-          detailContainer.innerHTML = `
-              <h3>Connection Details for ${data.name}</h3>
-              <p><strong>Username:</strong> ${data.username}</p>
-              <p><strong>Password:</strong> ${data.password}</p>
-              <p><strong>Hostname:</strong> ${data.hostname}</p>
-              <p><strong>Port:</strong> ${data.port}</p>
-              <p><strong>SSH Command:</strong> <code>${data.ssh_command}</code></p>
-              <button class="close-detail-btn">Close</button>
-          `;
+// Get the popup and close button
+var popup = document.getElementById("connectionPopup");
+var closePopup = document.getElementsByClassName("close-popup")[0];
 
-          // Append the new container to the main containers div
-          document.getElementById('containers').appendChild(detailContainer);
-
-          // Add event listener to close button
-          detailContainer.querySelector('.close-detail-btn').addEventListener('click', function() {
-              detailContainer.remove(); // Remove the detail container when closed
-          });
-      })
-      .catch(error => {
-          console.error('Error fetching connection details:', error);
-          alert('Error fetching connection details.');
-      });
+// Function to open the connection details popup
+function openConnectionPopup(containerId) {
+    // Fetch connection details based on the container ID
+    fetch(`/get_connection_details?id=${containerId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the popup with connection details
+            document.getElementById('connectionDetails').innerHTML = `
+                <strong>Name:</strong> ${data.name}<br>
+                <strong>Username:</strong> ${data.username}<br>
+                <strong>Password:</strong> ${data.password}<br>
+                <strong>Hostname:</strong> ${data.hostname}<br>
+                <strong>Port:</strong> ${data.port}<br>
+                <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
+            `;
+            // Show the popup
+            popup.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error fetching connection details:', error);
+            document.getElementById('connectionDetails').innerHTML = '<p>Error fetching connection details.</p>';
+            popup.style.display = "block"; // Show popup even if there's an error
+        });
 }
 
 // Event listener for dynamically created connect buttons
 document.addEventListener('click', function(event) {
-  if (event.target.classList.contains('connect-btn')) {
-      const containerId = event.target.id.split('-')[2]; // Get container ID from button ID
-      openConnectionDetails(containerId); // Open new connection details container
-  }
+    if (event.target.classList.contains('connect-btn')) {
+        const containerId = event.target.id.split('-')[2]; // Get container ID from button ID
+        openConnectionPopup(containerId); // Open new connection details popup
+    }
 });
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
+// When the user clicks on <span> (x), close the popup
+closePopup.onclick = function() {
+    popup.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside of the popup, close it
 window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if (event.target == popup) {
+        popup.style.display = "none";
     }
 };

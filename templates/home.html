@@ -26,12 +26,11 @@
         <h3>Your Containers:</h3>
       </div>
     </div>
-    <div id="myModal" class="modal">
-      <div class="connection-details" id="connectionDetails">
-          <span class="close">&times;</span>
-          <h2>Connection Established</h2> <!-- You can customize this content -->
-          <p>Your connection details will be shown here.</p>
-          <!-- You can add more content or inputs as needed -->
+    <div id="connectionPopup" class="popup">
+      <div class="popup-content">
+          <span class="close-popup">&times;</span>
+          <h2>Connection Details</h2>
+          <div id="connectionDetails"></div> <!-- This will be populated dynamically -->
       </div>
   </div>
     <script src="/static/script.js"></script>

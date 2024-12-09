@@ -245,6 +245,26 @@ def get_user_containers():
         return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3], "hostname": base_url_no_scheme} for container in containers])
     else:
         return jsonify([])
+    
+@app.route('/get_connection_details', methods=['GET'])
+def get_connection_details():
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
+    url = request.url_root
+    parsed_url = urlparse(url)
+
+    # Constructing the base URL without scheme and port
+    base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
+    id = request.args.get('id')
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    c.execute("SELECT name, username, password, port FROM containers WHERE name=? AND user=?",(id, session['username']))
+    container = c.fetchone()
+    conn.close()
+    if container:
+        return jsonify({"name": container[0], "username": container[1], "hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme}", "port": container[3]})
+    else:
+        return jsonify({"error": "Container not found."}), 404
 
 
 @app.route('/delete_container', methods=['DELETE'])

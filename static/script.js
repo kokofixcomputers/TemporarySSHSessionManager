@@ -133,7 +133,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           <p><strong>Password:</strong> ${container.password}</p>
           <p><strong>Hostname:</strong> ${container.hostname}</p>
           <p><strong>Port:</strong> ${container.port}</p></li>
-          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>`;
+          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button><button class="connect-btn" id="connect-btn-${container.name}">Connect</button>`;
           });
           html += '</ul>';
           containersDiv.innerHTML = html;
@@ -144,6 +144,13 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
             deleteBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               deleteContainer(containerId);
+            });
+          }
+          const connectBtns = document.getElementsByClassName('connect-btn');
+          for (let i = 0; i < connectBtns.length; i++) {
+            connectBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              //TODO: Add modal
             });
           }
         } else {
@@ -178,3 +185,52 @@ document.getElementById('logoutButton').addEventListener('click', function () {
     // Redirect users to the logout page
     window.location.href = '/logout';
 });
+
+// Get the modal and close button
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
+
+// Function to open modal and fetch connection details
+function openModal(containerId) {
+    // Fetch connection details based on the container ID
+    fetch(`/get_connection_details?id=${containerId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the modal with connection details
+            document.getElementById('connectionDetails').innerHTML = `
+                <strong>Name:</strong> ${data.name}<br>
+                <strong>Username:</strong> ${data.username}<br>
+                <strong>Password:</strong> ${data.password}<br>
+                <strong>Hostname:</strong> ${data.hostname}<br>
+                <strong>Port:</strong> ${data.port}<br>
+                <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
+            `;
+            // Show the modal
+            modal.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error fetching connection details:', error);
+            document.getElementById('connectionDetails').innerHTML = '<p>Error fetching connection details.</p>';
+            modal.style.display = "block"; // Show modal even if there's an error
+        });
+}
+
+// Event listener for dynamically created connect buttons
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('connect-btn')) {
+        const containerId = event.target.id.split('-')[2]; // Get container ID from button ID
+        openModal(containerId); // Open modal with the specific container ID
+    }
+});
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};

@@ -184,36 +184,47 @@ var modal = document.getElementById("myModal");
 var span = document.getElementsByClassName("close")[0];
 
 // Function to open modal and fetch connection details
-function openModal(containerId) {
-    // Fetch connection details based on the container ID
-    fetch(`/get_connection_details?id=${containerId}`)
-        .then(response => response.json())
-        .then(data => {
-            // Populate the modal with connection details
-            document.getElementById('connectionDetails').innerHTML = `
-                <strong>Name:</strong> ${data.name}<br>
-                <strong>Username:</strong> ${data.username}<br>
-                <strong>Password:</strong> ${data.password}<br>
-                <strong>Hostname:</strong> ${data.hostname}<br>
-                <strong>Port:</strong> ${data.port}<br>
-                <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
-            `;
-            // Show the modal
-            modal.style.display = "block";
-        })
-        .catch(error => {
-            console.error('Error fetching connection details:', error);
-            document.getElementById('connectionDetails').innerHTML = '<p>Error fetching connection details.</p>';
-            modal.style.display = "block"; // Show modal even if there's an error
-        });
+// Function to open a new connection details container
+function openConnectionDetails(containerId) {
+  // Fetch connection details based on the container ID
+  fetch(`/get_connection_details?id=${containerId}`)
+      .then(response => response.json())
+      .then(data => {
+          // Create a new div for connection details
+          const detailContainer = document.createElement('div');
+          detailContainer.className = 'connection-detail'; // Add a class for styling
+          
+          // Populate the new container with connection details
+          detailContainer.innerHTML = `
+              <h3>Connection Details for ${data.name}</h3>
+              <p><strong>Username:</strong> ${data.username}</p>
+              <p><strong>Password:</strong> ${data.password}</p>
+              <p><strong>Hostname:</strong> ${data.hostname}</p>
+              <p><strong>Port:</strong> ${data.port}</p>
+              <p><strong>SSH Command:</strong> <code>${data.ssh_command}</code></p>
+              <button class="close-detail-btn">Close</button>
+          `;
+
+          // Append the new container to the main containers div
+          document.getElementById('containers').appendChild(detailContainer);
+
+          // Add event listener to close button
+          detailContainer.querySelector('.close-detail-btn').addEventListener('click', function() {
+              detailContainer.remove(); // Remove the detail container when closed
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching connection details:', error);
+          alert('Error fetching connection details.');
+      });
 }
 
 // Event listener for dynamically created connect buttons
 document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('connect-btn')) {
-        const containerId = event.target.id.split('-')[2]; // Get container ID from button ID
-        openModal(containerId); // Open modal with the specific container ID
-    }
+  if (event.target.classList.contains('connect-btn')) {
+      const containerId = event.target.id.split('-')[2]; // Get container ID from button ID
+      openConnectionDetails(containerId); // Open new connection details container
+  }
 });
 
 // When the user clicks on <span> (x), close the modal

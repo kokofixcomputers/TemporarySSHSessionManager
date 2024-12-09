@@ -134,3 +134,27 @@
     text-decoration: none;
     cursor: pointer;
   }
+  .connection-detail {
+    background-color: #f9f9f9;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+  .connection-detail h3 {
+      margin-top: 0;
+  }
+
+  .connection-detail button {
+      background-color: #ff5e5e; /* Red color for close button */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+  }
+
+  .connection-detail button:hover {
+      background-color: #ff3d3d; /* Darker red on hover */
+  }

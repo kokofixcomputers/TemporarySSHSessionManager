@@ -23,7 +23,7 @@
 
   .result button {
     width: auto; /* Allow button to size based on content */
-    margin: 0; /* Remove margin if it's causing overflow */
+    margin: 0;
   }
   
   h1 {
@@ -36,6 +36,7 @@
     color: white;
     border: none;
     border-radius: 5px;
+    display: flex;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
   }

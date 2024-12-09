@@ -58,7 +58,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           <p><strong>Password:</strong> ${container.password}</p>
           <p><strong>Hostname:</strong> ${container.hostname}</p>
           <p><strong>Port:</strong> ${container.port}</p></li>
-          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>`;
+          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button><button class="connect-btn" id="connect-btn-${container.name}">Connect</button>`;
       });
       html += '</ul>';
       containersDiv.innerHTML = html;
@@ -93,7 +93,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           <p><strong>Password:</strong> ${container.password}</p>
           <p><strong>Hostname:</strong> ${container.hostname}</p>
           <p><strong>Port:</strong> ${container.port}</p></li>
-          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>`;
+          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button><button class="connect-btn" id="connect-btn-${container.name}">Connect</button>`;
             const containernametodelete = container.name;
           });
           html += '</ul>';
@@ -144,13 +144,6 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
             deleteBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               deleteContainer(containerId);
-            });
-          }
-          const connectBtns = document.getElementsByClassName('connect-btn');
-          for (let i = 0; i < connectBtns.length; i++) {
-            connectBtns[i].addEventListener('click', function () {
-              const containerId = this.id.split('-')[2];
-              //TODO: Add modal
             });
           }
         } else {

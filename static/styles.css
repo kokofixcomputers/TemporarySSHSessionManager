@@ -20,6 +20,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
+
+  .result button {
+    width: auto; /* Allow button to size based on content */
+    margin: 0; /* Remove margin if it's causing overflow */
+  }
   
   h1 {
     margin-bottom: 20px;
@@ -62,6 +67,7 @@
   .result {
     margin-top: 20px;
     padding: 10px;
+    display: flex;
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;

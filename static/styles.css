@@ -37,11 +37,16 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 10px;
     transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
   }
   
   button:hover {
     background-color: #0056b3;
+  }
+
+  button:last-child {
+    margin-right: 0;
   }
 
   button:disabled {

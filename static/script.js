@@ -51,9 +51,12 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       let html = '<ul class="container-list">';
       containers.forEach(container => {
         html += `<li>
-                  <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                  <button id="delete-btn-${container.id}" class="delete-btn">Delete</button>
-                </li>`;
+            <strong>Name:</strong> ${container.name}<br>
+            <strong>Username:</strong> ${container.username}<br>
+            <strong>Port:</strong> ${container.port}<br>
+            <strong>Password:</strong> ${container.password}<br>
+            <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+          </li>`;
       });
       html += '</ul>';
       containersDiv.innerHTML = html;
@@ -81,9 +84,12 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           let html = '<ul class="container-list">';
           data.forEach(container => {
             html += `<li>
-                      <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-                    </li>`;
+            <strong>Name:</strong> ${container.name}<br>
+            <strong>Username:</strong> ${container.username}<br>
+            <strong>Port:</strong> ${container.port}<br>
+            <strong>Password:</strong> ${container.password}<br>
+            <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+          </li>`;
             const containernametodelete = container.name;
           });
           html += '</ul>';
@@ -116,9 +122,12 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           let html = '<ul class="container-list">';
           data.forEach(container => {
             html += `<li>
-                      <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-                    </li>`;
+            <strong>Name:</strong> ${container.name}<br>
+            <strong>Username:</strong> ${container.username}<br>
+            <strong>Port:</strong> ${container.port}<br>
+            <strong>Password:</strong> ${container.password}<br>
+            <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+          </li>`;
           });
           html += '</ul>';
           containersDiv.innerHTML = html;

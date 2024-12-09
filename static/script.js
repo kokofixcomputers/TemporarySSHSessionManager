@@ -57,7 +57,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           <p><strong>Username:</strong> ${container.username}</p>
           <p><strong>Password:</strong> ${container.password}</p>
           <p><strong>Hostname:</strong> ${container.hostname}</p>
-          <p><strong>Port:</strong> ${container.port}</p></li>`;
+          <p><strong>Port:</strong> ${container.port}</p></li>
+          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>`;
       });
       html += '</ul>';
       containersDiv.innerHTML = html;
@@ -91,7 +92,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           <p><strong>Username:</strong> ${container.username}</p>
           <p><strong>Password:</strong> ${container.password}</p>
           <p><strong>Hostname:</strong> ${container.hostname}</p>
-          <p><strong>Port:</strong> ${container.port}</p></li>`;
+          <p><strong>Port:</strong> ${container.port}</p></li>
+          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>`;
             const containernametodelete = container.name;
           });
           html += '</ul>';
@@ -130,7 +132,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           <p><strong>Username:</strong> ${container.username}</p>
           <p><strong>Password:</strong> ${container.password}</p>
           <p><strong>Hostname:</strong> ${container.hostname}</p>
-          <p><strong>Port:</strong> ${container.port}</p></li>`;
+          <p><strong>Port:</strong> ${container.port}</p></li>
+          <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>`;
           });
           html += '</ul>';
           containersDiv.innerHTML = html;

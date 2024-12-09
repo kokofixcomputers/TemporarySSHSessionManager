@@ -221,6 +221,12 @@ def get_user_containers():
     user = session.get('username')
     if not authenticated(session):
         return "UNAUTHENTICATED", 401
+    
+    url = request.url_root
+    parsed_url = urlparse(url)
+
+    # Constructing the base URL without scheme and port
+    base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
         
     try:
         conn = sqlite3.connect('containers.db')
@@ -236,7 +242,7 @@ def get_user_containers():
         return jsonify([]), 500
 
     if containers:
-        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3]} for container in containers])
+        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3], "hostname": base_url_no_scheme} for container in containers])
     else:
         return jsonify([])
 

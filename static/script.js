@@ -50,13 +50,14 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     if (containers.length > 0) {
       let html = '<ul class="container-list">';
       containers.forEach(container => {
-        html += `<li>
-            <strong>Name:</strong> ${container.name}<br>
-            <strong>Username:</strong> ${container.username}<br>
-            <strong>Port:</strong> ${container.port}<br>
-            <strong>Password:</strong> ${container.password}<br>
-            <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-          </li>`;
+        html += `
+        <li>
+          <h3>Session Details:</h3>
+          <p><strong>Name:</strong> ${container.name}</p>
+          <p><strong>Username:</strong> ${container.username}</p>
+          <p><strong>Password:</strong> ${container.password}</p>
+          <p><strong>Hostname:</strong> ${container.hostname}</p>
+          <p><strong>Port:</strong> ${container.port}</p></li>`;
       });
       html += '</ul>';
       containersDiv.innerHTML = html;
@@ -83,13 +84,14 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         if (data.length > 0) {
           let html = '<ul class="container-list">';
           data.forEach(container => {
-            html += `<li>
-            <strong>Name:</strong> ${container.name}<br>
-            <strong>Username:</strong> ${container.username}<br>
-            <strong>Port:</strong> ${container.port}<br>
-            <strong>Password:</strong> ${container.password}<br>
-            <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-          </li>`;
+            html += `
+        <li>
+          <h3>Session Details:</h3>
+          <p><strong>Name:</strong> ${container.name}</p>
+          <p><strong>Username:</strong> ${container.username}</p>
+          <p><strong>Password:</strong> ${container.password}</p>
+          <p><strong>Hostname:</strong> ${container.hostname}</p>
+          <p><strong>Port:</strong> ${container.port}</p></li>`;
             const containernametodelete = container.name;
           });
           html += '</ul>';
@@ -121,13 +123,14 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         if (data.length > 0) {
           let html = '<ul class="container-list">';
           data.forEach(container => {
-            html += `<li>
-            <strong>Name:</strong> ${container.name}<br>
-            <strong>Username:</strong> ${container.username}<br>
-            <strong>Port:</strong> ${container.port}<br>
-            <strong>Password:</strong> ${container.password}<br>
-            <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-          </li>`;
+            html += `
+        <li>
+          <h3>Session Details:</h3>
+          <p><strong>Name:</strong> ${container.name}</p>
+          <p><strong>Username:</strong> ${container.username}</p>
+          <p><strong>Password:</strong> ${container.password}</p>
+          <p><strong>Hostname:</strong> ${container.hostname}</p>
+          <p><strong>Port:</strong> ${container.port}</p></li>`;
           });
           html += '</ul>';
           containersDiv.innerHTML = html;

@@ -7,6 +7,13 @@ import json
 connected_agents = {}
 agent_id_counter = 0
 
+async def send_status_request(websocket):
+    """Continuously send status request to the agent every minute."""
+    while True:
+        request_message = {"message": "request_report_status"}
+        await websocket.send(json.dumps(request_message))
+        await asyncio.sleep(60)  # Wait for 60 seconds before sending again
+
 async def handler(websocket, path):
     global agent_id_counter
     # Assign a unique ID to the new agent
@@ -16,9 +23,8 @@ async def handler(websocket, path):
 
     print(f"Agent {agent_id} connected")
 
-    # Send a request for report status to the newly connected agent
-    request_message = {"message": "request_report_status"}
-    await websocket.send(json.dumps(request_message))
+    # Start sending status requests to the newly connected agent
+    asyncio.create_task(send_status_request(websocket))
 
     try:
         async for message in websocket:

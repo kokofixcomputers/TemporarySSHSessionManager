@@ -129,7 +129,7 @@ def create_container_route():
 
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
-    name, username, password, port = handler.create_container()
+    name, username, password, port = handler.create_container(start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']))
     if name is not None:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
@@ -316,7 +316,7 @@ def logout():
 create_database()
 if DEBUG:
     debug_print("WARNING: DEBUG mode is enabled. Non-Production WSGI server will be used.", colors.fg.yellow)
-    app.run(host='0.0.0.0', port=config.get()['PORT'], debug=DEBUG)
+    app.run(host='0.0.0.0', port=config.get()['WEB_DASHBORD_PORT'], debug=DEBUG)
 else:
-    print("Server started on port " + str(config.get()['PORT']))
-    serve(app, host='0.0.0.0', port=config.get()['PORT'])
+    print("Server started on port " + str(config.get()['WEB_DASHBORD_PORT']))
+    serve(app, host='0.0.0.0', port=config.get()['WEB_DASHBORD_PORT'])

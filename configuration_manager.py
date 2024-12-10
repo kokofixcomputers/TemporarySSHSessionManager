@@ -29,5 +29,7 @@ def init():
     config.save()['ALLOW_ADMIN_TO_ACCESS_USER_CONTAINERS'] = True
     config.save()['APP_SECRET'] = str(app_string)
     config.save()['DEBUG_MODE'] = False
-    config.save()['PORT'] = 2271
+    config.save()['WEB_DASHBORD_PORT'] = 2271
+    config.save()['STARTING_PORT_FOR_CONTAINERS'] = 2280
+    config.save()['ENDING_PORT_FOR_CONTAINERS'] = 2599
     config.save()

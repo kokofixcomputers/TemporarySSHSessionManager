@@ -23,10 +23,10 @@ word_list = [
     "happy", "bright", "bold", "chill", "zesty"
 ]  # Expanded list of words for username generation
 
-def create_container():
+def create_container(start_port=2280, end_port=2599):
     username = generate_username(word_list)
     password = generate_password()
-    host_port = generate_random_port()
+    host_port = generate_random_port(start_port, end_port)
 
     environment_vars = {
         "SUDO_ACCESS": "true",

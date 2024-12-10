@@ -90,24 +90,21 @@
     margin: 0;
     display: flex;
     flex-wrap: wrap; /* Allow wrapping */
-    max-width: 100%; /* Ensure it doesn't exceed the parent width */
   }
   
   .container-list li {
-    margin: 10px;
+    margin: 10px; /* Space between items */
     padding: 10px;
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;
   
-    /* Set a fixed width or use flex-basis */
+    /* Use flex-basis for responsive design */
     flex: 0 1 calc(50% - 20px); /* Two items per row with margin considered */
     
     display: flex;
     flex-direction: column; /* Stack content vertically */
     align-items: center; /* Center items horizontally */
-    
-    max-width: calc(50% - 20px); /* Prevents items from exceeding this width */
   }
   
   .button-container {

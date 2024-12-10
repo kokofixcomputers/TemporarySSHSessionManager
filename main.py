@@ -130,8 +130,9 @@ BASH_RC="/config/.bashrc"
 # Update the package index
 apk update
 
-# Install Python 3, pip, and curl
+# Install Python 3, pip, curl, and gcc
 apk add --no-cache python3 py3-pip curl
+apk add gcc python3-dev musl-dev linux-headers
 
 # Verify the installation
 python3 --version

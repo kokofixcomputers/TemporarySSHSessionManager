@@ -98,10 +98,6 @@
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;
-  
-    /* Use flex-basis for responsive design */
-    flex: 0 1 calc(50% - 20px); /* Two items per row with margin considered */
-    
     display: flex;
     flex-direction: column; /* Stack content vertically */
     align-items: center; /* Center items horizontally */

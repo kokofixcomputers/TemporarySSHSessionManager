@@ -51,18 +51,18 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       let html = '<ul class="container-list">';
       containers.forEach(container => {
         html += `
-            <li>
-              <h3>Session Details:</h3>
-              <p><strong>Name:</strong> ${container.name}</p>
-              <p><strong>Username:</strong> ${container.username}</p>
-              <p><strong>Password:</strong> ${container.password}</p>
-              <p><strong>Hostname:</strong> ${container.hostname}</p>
-              <p><strong>Port:</strong> ${container.port}</p>
-            </li>
-            <div class="button-container">
-              <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-              <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
-            </div>`;
+              <li>
+    <h3>Session Details:</h3>
+    <p><strong>Name:</strong> ${container.name}</p>
+    <p><strong>Username:</strong> ${container.username}</p>
+    <p><strong>Password:</strong> ${container.password}</p>
+    <p><strong>Hostname:</strong> ${container.hostname}</p>
+    <p><strong>Port:</strong> ${container.port}</p>
+    <div class="button-container">
+      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+      <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+    </div>
+  </li>`;
       });
       html += '</ul>';
       containersDiv.innerHTML = html;

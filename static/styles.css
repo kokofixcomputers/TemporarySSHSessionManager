@@ -117,7 +117,7 @@
   }
   
   .button-container button:last-child {
-    margin-right: 0; /* This was useless */
+    margin-right: 0; /* Remove right margin from last button */
   }
   /* Popup Styles */
   .popup {

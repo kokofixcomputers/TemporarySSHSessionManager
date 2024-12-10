@@ -41,7 +41,7 @@ def create_container():
         client = docker.from_env()
         time.sleep(1)
         container = client.containers.run(
-            "kokofixcomputers/docker-openssh-server-fork:latest",
+            "lscr.io/linuxserver/openssh-server:latest",
             detach=True,
             environment=environment_vars,
             ports={'2222/tcp': host_port}  # Map container port 2222 to a random host port

@@ -102,7 +102,7 @@
     min-width: 150px;
     display: flex;
     flex-direction: column; /* Stack content vertically */
-    align-items: center; /* Center content horizontally */
+    align-items: center; /* Center items horizontally */
   }
   
   .button-container {
@@ -113,12 +113,11 @@
   }
   
   .button-container button {
-    margin-right: 10px; /* Space between buttons */
+    margin: 0 5px; /* Equal space between buttons */
   }
   
-  /* Remove margin from the last button */
   .button-container button:last-child {
-    margin-right: 0; /* No margin for the last button */
+    margin-right: 0; /* This was useless */
   }
   /* Popup Styles */
   .popup {

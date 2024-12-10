@@ -88,22 +88,32 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex; /* Enable Flexbox */
-    flex-wrap: wrap; /* Allow items to wrap onto the next line (writing all those down so i dont forget and delete them :) */
+    display: flex; /* Enable Flexbox for horizontal alignment */
+    flex-wrap: wrap; /* Allow wrapping */
   }
   
   .container-list li {
-    margin: 10px; /* Add margin around each item */
+    margin: 10px; /* Space between items */
     padding: 10px;
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;
-    flex: 1; /* Allow items to grow and fill available space */
-    min-width: 150px; /* Set a minimum width for each item */
+    flex: 1; /* Allow items to grow */
+    min-width: 150px; /* Minimum width for items */
   }
   
-  .container-list li button {
-    float: right;
+  .button-container {
+    display: flex; /* Align buttons in a row */
+    margin-top: 10px; /* Space above buttons */
+  }
+  
+  .button-container button {
+    margin-right: 10px; /* Space between buttons */
+  }
+  
+  /* Optional: Remove margin from the last button */
+  .button-container button:last-child {
+    margin-right: 0; /* No margin for the last button */
   }
   /* Popup Styles */
   .popup {

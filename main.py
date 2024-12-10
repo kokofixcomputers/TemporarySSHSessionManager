@@ -167,7 +167,7 @@ fi
 
 # Verify that the virtual environment is activated and pip is available
 pip --version
-pip install websockets requests
+pip install websockets requests psutil
 
 # Create the directory for the agent if it doesn't exist
 mkdir -p /etc/agent

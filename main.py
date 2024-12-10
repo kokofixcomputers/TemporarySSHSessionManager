@@ -258,7 +258,7 @@ host = "'''+base_url_no_scheme+'''"
 schemed_host = "''' + url +'''"
 
 async def listen_for_commands():
-    uri = scheme + "://" + host + str(port)
+    uri = scheme + "://" + host + ":" + str(port)
     try:
         async with websockets.connect(uri) as websocket:
             while True:

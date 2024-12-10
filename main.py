@@ -190,7 +190,7 @@ def create_container_route():
 
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
-    name, username, password, port = handler.create_container(base_url_no_scheme + "/install", start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']))
+    name, username, password, port = handler.create_container(url + "/install", start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']))
     if name is not None:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()

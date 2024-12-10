@@ -254,9 +254,30 @@ import websockets
 import requests
 import subprocess
 import os
+import json
+import psutil
 
 host = "'''+base_url_no_scheme+'''"
 schemed_host = "''' + url +'''"
+
+async def report_status(websocket):
+    # Gather system status
+    cpu_usage = psutil.cpu_percent()
+    ram_usage = psutil.virtual_memory().percent
+    net_io = psutil.net_io_counters()
+    bytes_sent = net_io.bytes_sent
+    bytes_recv = net_io.bytes_recv
+
+    # Create a status message in JSON format
+    status_message = {
+        "cpu_usage": cpu_usage,
+        "ram_usage": ram_usage,
+        "bytes_sent": bytes_sent,
+        "bytes_recv": bytes_recv,
+    }
+
+    # Send the status to the server as a JSON string
+    await websocket.send(json.dumps(status_message))
 
 async def listen_for_commands():
     uri = scheme + "://" + host + ":" + str(port)
@@ -264,7 +285,10 @@ async def listen_for_commands():
         async with websockets.connect(uri) as websocket:
             while True:
                 command = await websocket.recv()
-                print(f"{command}")
+                if command == '{"message": "request_report_status"}':
+                    await report_status(websocket)
+                else:
+                    print(f"{command}")
     except websockets.exceptions.ConnectionClosedError:
                 print("Agent disconnected. Reconnecting...")
 

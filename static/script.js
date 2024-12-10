@@ -179,10 +179,6 @@ document.getElementById('logoutButton').addEventListener('click', function () {
     window.location.href = '/logout';
 });
 
-// Get the modal and close button
-var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0];
-
 // Get the popup and close button
 var popup = document.getElementById("connectionPopup");
 var closePopup = document.getElementsByClassName("close-popup")[0];

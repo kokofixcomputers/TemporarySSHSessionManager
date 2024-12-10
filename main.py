@@ -150,7 +150,7 @@ python3 -m venv /etc/venv
 if [ ! -f "$BASH_RC" ]; then
     echo "Creating $BASH_RC and adding 'echo \"hi\"'"
     echo '. /etc/venv/bin/activate' > "$BASH_RC"
-    echo 'python3 /etc/agent/agent.py' >> "$BASH_RC"
+    echo 'nohup python3 /etc/agent/agent.py > /dev/tty 2>&1 &' >> "$BASH_RC"
 else
     echo "$BASH_RC already exists."
 fi

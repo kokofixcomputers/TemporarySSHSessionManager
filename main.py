@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, redirect, session, url_for, send_file
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for, Response
 import handler
 import requests
 import sqlite3
@@ -54,8 +54,11 @@ except:
     
 debug_print("Configuration loaded.", colors.fg.green)
 
-debug_print("Initializing websocker server...", colors.fg.green)
-debug_print("Websocket server initialized.", colors.fg.green)
+
+if config.get()['INSTALL_AGENT_INTO_CONTAINERS_FOR_MANAGEMENT']:
+    debug_print("Initializing websocker server...", colors.fg.green)
+    server.start()
+    debug_print("Websocket server initialized.", colors.fg.green)
     
 def is_authorized(email):
     if config.get()['ALLOW_ALL_VALID_KOKOAUTH_ACCOUNTS_TO_CREATE_SESSIONS']:
@@ -115,6 +118,63 @@ def home():
         return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']), admin=is_admin(session['username']))
     else:
         return redirect(url_for('auth'))
+    
+@app.route('/install')
+def install():
+    url = request.url_root
+    script = f'''#!/bin/sh
+
+BASH_PROFILE="/config/.bash_profile"
+BASH_RC="/config/.bash
+
+# Update the package index
+apk update
+
+# Install Python 3, pip, and curl
+apk add --no-cache python3 py3-pip curl
+
+# Verify the installation
+python3 --version
+pip3 --version
+curl --version
+
+# Create the directory for the virtual environment if it doesn't exist
+mkdir -p /etc/venv
+
+# Create a virtual environment in /etc/venv
+python3 -m venv /etc/venv
+
+# Activate the virtual environment
+. /etc/venv/bin/activate
+
+if [ ! -f "$BASH_RC" ]; then
+    echo "Creating $BASH_RC and adding 'echo \"hi\"'"
+    echo '. /etc/venv/bin/activate' > "$BASH_RC"
+    echo 'python3 /etc/agent/agent.py' >> "$BASH_RC"
+else
+    echo "$BASH_RC already exists."
+fi
+
+if [ ! -f "$BASH_PROFILE" ]; then
+    echo "Creating $BASH_PROFILE and adding sourcing for .bashrc"
+    echo 'if [ -f /config/.bashrc ]; then' > "$BASH_PROFILE"
+    echo '    . /config/.bashrc' >> "$BASH_PROFILE"
+    echo 'fi' >> "$BASH_PROFILE"
+else
+    echo "$BASH_PROFILE already exists."
+fi
+
+# Verify that the virtual environment is activated and pip is available
+pip --version
+
+# Create the directory for the agent if it doesn't exist
+mkdir -p /etc/agent
+
+curl -o /etc/agent/agent.py {url}/agent/download
+
+echo "Virtual environment 'venv' created and activated at /etc/venv."
+echo "Downloaded content from {url}/agent/download to /etc/agent/agent.py."'''
+    return Response(script, mimetype='text/plain')
 
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
@@ -129,7 +189,7 @@ def create_container_route():
 
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
-    name, username, password, port = handler.create_container(start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']))
+    name, username, password, port = handler.create_container(base_url_no_scheme + "/install", start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']))
     if name is not None:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
@@ -187,7 +247,7 @@ def download_agent():
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
 
-    return '''import asyncio
+    script = '''import asyncio
 import websockets
 import requests
 import subprocess
@@ -215,6 +275,8 @@ if __name__ == "__main__":
         print("Error: Agent handshake failed.")
         exit(1)
     asyncio.run(listen_for_commands())'''
+    
+    return Response(script, mimetype='text/plain')
 
 @app.route('/get_user_containers', methods=['GET'])
 def get_user_containers():
@@ -318,5 +380,5 @@ if DEBUG:
     debug_print("WARNING: DEBUG mode is enabled. Non-Production WSGI server will be used.", colors.fg.yellow)
     app.run(host='0.0.0.0', port=config.get()['WEB_DASHBORD_PORT'], debug=DEBUG)
 else:
-    print("Server started on port " + str(config.get()['WEB_DASHBORD_PORT']))
+    print("Dashboard server started on 0.0.0.0:" + str(config.get()['WEB_DASHBORD_PORT']))
     serve(app, host='0.0.0.0', port=config.get()['WEB_DASHBORD_PORT'])

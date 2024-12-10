@@ -29,6 +29,3 @@ def send_message(message):
 def start():
     server_thread = threading.Thread(target=lambda: asyncio.run(start_server()))
     server_thread.start()
-
-    # Wait for both threads to finish (if they ever do)
-    server_thread.join()

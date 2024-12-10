@@ -14,3 +14,9 @@ if config.get()['PORT']:
     config.save()['STARTING_PORT_FOR_CONTAINERS'] = config.get()['WEB_DASHBORD_PORT'] + 10
     config.save()['ENDING_PORT_FOR_CONTAINERS'] = config.get()['WEB_DASHBORD_PORT'] + 610
     config.save()
+    
+try:
+    HAS = config.get()['INSTALL_AGENT_INTO_CONTAINERS_FOR_MANAGEMENT']
+except:
+    config.save()['INSTALL_AGENT_INTO_MANAGEMENT_CONTAINERS'] = True
+    config.save()

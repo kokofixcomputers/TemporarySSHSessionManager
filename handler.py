@@ -23,7 +23,7 @@ word_list = [
     "happy", "bright", "bold", "chill", "zesty"
 ]  # Expanded list of words for username generation
 
-def create_container(start_port=2280, end_port=2599):
+def create_container(web_dashboard_host, start_port=2280, end_port=2599):
     username = generate_username(word_list)
     password = generate_password()
     host_port = generate_random_port(start_port, end_port)
@@ -33,6 +33,7 @@ def create_container(start_port=2280, end_port=2599):
         "PASSWORD_ACCESS": "true",
         "USER_PASSWORD": password,
         "USER_NAME": username,
+        "INSTALL_SCRIPT_URL": web_dashboard_host,
         "WELCOME_MESSAGE": "\033[36mWelcome to your temporary environment.\033[0m\nTemporary SSH Server made by kokofixcomputers\nGitHub: https://github.com/kokofixcomputers/TemporarySSHSessionManager.git \nLicensed Under the Mit License.\n\n\033[32mTo access sudo, run a command with sudo and enter the password shown in the dashboard when asked for password.\033[0m\n\n\n\033[1mPLEASE REFRAIN FROM USING CONFIDENTIAL INFORMATION IN THIS ENVIROMENT.\033[0m\nPlease note: admins can see and connect to this container.\n\033[33mPlease also refrain from using this environment for anything illegal or unethical.\n\033[0m\n\n\033[1mWARNING: By using this environment you agree not to use this container for anything illegal or unehtical and have read the above notes.\n\n\033[0mHave fun!",
     }
 

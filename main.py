@@ -255,6 +255,7 @@ import subprocess
 import os
 
 host = "'''+base_url_no_scheme+'''"
+schemed_host = "''' + url +'''"
 
 async def listen_for_commands():
     uri = scheme + "://" + host + port
@@ -267,7 +268,7 @@ async def listen_for_commands():
                 print("Agent disconnected. Reconnecting...")
 
 if __name__ == "__main__":
-    response = requests.get(host + "/agent/handshake").json()
+    response = requests.get(schemed_host + "agent/handshake").json()
     if response['message'] == "OK" and response['code'] == 200:
         # Awesome! Ready to connect.
         port = int(response['port'])

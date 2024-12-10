@@ -125,7 +125,7 @@ def install():
     script = f'''#!/bin/sh
 
 BASH_PROFILE="/config/.bash_profile"
-BASH_RC="/config/.bash
+BASH_RC="/config/.bash"
 
 # Update the package index
 apk update

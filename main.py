@@ -262,7 +262,7 @@ def get_connection_details():
     container = c.fetchone()
     conn.close()
     if container:
-        return jsonify({"name": container[0], "username": container[1], "hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme}", "port": container[3]})
+        return jsonify({"name": container[0], "username": container[1], "hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme} -p {container[3]}", "port": container[3]})
     else:
         return jsonify({"error": "Container not found."}), 404
 

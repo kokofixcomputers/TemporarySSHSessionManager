@@ -88,30 +88,35 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex; /* Enable Flexbox for horizontal alignment */
-    flex-wrap: wrap; /* Allow wrapping */
+    display: flex;
+    flex-wrap: wrap;
   }
   
   .container-list li {
-    margin: 10px; /* Space between items */
+    margin: 10px;
     padding: 10px;
     border: 1px solid #dddddd;
     border-radius: 5px;
     background-color: #f9f9f9;
-    flex: 1; /* Allow items to grow */
-    min-width: 150px; /* Minimum width for items */
+    flex: 1;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    align-items: center; /* Center content horizontally */
   }
   
   .button-container {
-    display: flex; /* Align buttons in a row */
+    display: flex;
+    justify-content: center; /* Center buttons horizontally */
     margin-top: 10px; /* Space above buttons */
+    width: 100%; /* Ensure it spans the full width */
   }
   
   .button-container button {
     margin-right: 10px; /* Space between buttons */
   }
   
-  /* Optional: Remove margin from the last button */
+  /* Remove margin from the last button */
   .button-container button:last-child {
     margin-right: 0; /* No margin for the last button */
   }

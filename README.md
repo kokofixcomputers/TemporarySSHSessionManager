@@ -39,4 +39,6 @@ Here is all the configuration keys and their description:
 | `APP_SECRET` | The secret key for the app used for encrypting sessions. **DO NOT SHARE WITH OTHERS** | <randomly generated> |
 | `ADMIN_KOKOAUTH_ACCOUNT_EMAIL_ADDRESS` | The list of email addresses of admins. | `[]` |
 | `DEBUG_MODE` | If set to `true`, the app will run in debug mode. **NOT RECOMMENDED FOR PRODUCTION USE** | `false` |
-| `PORT` | The port the app will run on. | `2271` |
+| `WEB_DASHBORD_PORT` | The port the app will run on. Previously named `PORT` but moved to `WEB_DASHBORD_PORT` migration script will help migrate | `2271` |
+| `STARTING_PORT_FOR_CONTAINERS` | Starting port of the randomly generated port for the ssh session | `2280` |
+| `ENDING_PORT_FOR_CONTAINERS` | Ending port of the randomly generated port for the ssh session | `2599` |

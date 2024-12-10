@@ -125,7 +125,7 @@ def install():
     script = f'''#!/bin/sh
 
 BASH_PROFILE="/config/.bash_profile"
-BASH_RC="/config/.bash"
+BASH_RC="/config/.bashrc"
 
 # Update the package index
 apk update
@@ -258,7 +258,7 @@ host = "'''+base_url_no_scheme+'''"
 schemed_host = "''' + url +'''"
 
 async def listen_for_commands():
-    uri = scheme + "://" + host + port
+    uri = scheme + "://" + host + str(port)
     try:
         async with websockets.connect(uri) as websocket:
             while True:

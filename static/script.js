@@ -3,6 +3,8 @@ var modal;
 var span;
 var modal_create;
 var span_create;
+var modal_delete;
+var span_delete;
 
 // Function to open the modal
 function openModal() {
@@ -15,6 +17,11 @@ function openModalCreate() {
         modal_create.style.display = "block";
     }
 }
+function openModalDelete() {
+    if (modal_delete) {
+        modal_delete.style.display = "block";
+    }
+}
 
 // Function to close the modal
 function closeModal() {
@@ -25,6 +32,11 @@ function closeModal() {
 function closeModalCreate() {
     if (modal_create) {
         modal_create.style.display = "none";
+    }
+}
+function closeModalDelete() {
+    if (modal_delete) {
+        modal_delete.style.display = "none";
     }
 }
 
@@ -52,6 +64,18 @@ document.addEventListener("DOMContentLoaded", function() {
     window.onclick = function(event) {
         if (event.target == modal_create) {
             closeModalCreate();
+        }
+    }
+});
+document.addEventListener("DOMContentLoaded", function() {
+    modal_delete = document.getElementById("myModalDelete");
+    span_delete = document.getElementsByClassName("close")[0];
+    // Close the modal when the close button is clicked
+    span_delete.onclick = closeModalDelete;
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == modal_delete) {
+            closeModalDelete();
         }
     }
 });
@@ -257,8 +281,10 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
   
   function deleteContainer(containerId) {
     if (confirm('Are you sure you want to delete this container?')) {
+      openModalDelete();
       fetch(`/delete_container?id=${containerId}`, { method: 'DELETE' })
         .then(response => {
+          closeModalDelete();
           if (response.ok) {
             refreshContainers();
           } else {
@@ -267,6 +293,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           }
         })
         .catch(error => {
+          closeModalDelete();
           console.error('Error deleting container:', error);
           alert('Error deleting container. Please try again.');
         });

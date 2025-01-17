@@ -1,20 +1,37 @@
-// Modal Code
-var modal = document.getElementById("myModal");
-var span = document.getElementsByClassName("close")[0];
-function openModal() {
-    modal.style.display = "block";
-}
-function closeModal() {
-    modal.style.display = "none";
-}
-span.onclick = closeModal();
+// Declare modal and span variables globally
+var modal;
+var span;
 
-// Close the modal when clicking outside of it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        closeModal();
+// Function to open the modal
+function openModal() {
+    if (modal) {
+        modal.style.display = "block";
     }
 }
+
+// Function to close the modal
+function closeModal() {
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Wait for DOM content to load
+document.addEventListener("DOMContentLoaded", function() {
+    modal = document.getElementById("myModal");
+    span = document.getElementsByClassName("close")[0];
+
+    // Close the modal when the close button is clicked
+    span.onclick = closeModal;
+
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+});
+
 
 
 

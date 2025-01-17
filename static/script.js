@@ -35,13 +35,13 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
   
   function displayResult(data) {
     document.getElementById('result').innerHTML = `
-          <h3>Session Details:</h3>
-          <p><strong>Name:</strong> ${data.name}</p>
-          <p><strong>Username:</strong> ${data.username}</p>
-          <p><strong>Password:</strong> ${data.password}</p>
-          <p><strong>Hostname:</strong> ${data.hostname}</p>
-          <p><strong>Port:</strong> ${data.port}</p>
-          <p><strong>SSH Command:</strong> <code>${data.ssh_command}</code></p>
+          <h3>Session Details:</h3><br>
+          <p><strong>Name:</strong> ${data.name}</p><br>
+          <p><strong>Username:</strong> ${data.username}</p><br>
+          <p><strong>Password:</strong> ${data.password}</p><br>
+          <p><strong>Hostname:</strong> ${data.hostname}</p><br>
+          <p><strong>Port:</strong> ${data.port}</p><br>
+          <p><strong>SSH Command:</strong> <code>${data.ssh_command}</code></p><br>
       `;
   
     // Update the containers div with the user's containers
@@ -60,6 +60,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -99,6 +100,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -234,6 +236,7 @@ function openConnectionPopup(containerId) {
                 <strong>Password:</strong> ${data.password}<br>
                 <strong>Hostname:</strong> ${data.hostname}<br>
                 <strong>Port:</strong> ${data.port}<br>
+                <strong>Development Port:</strong> 80->${data.exposed_port}<br>
                 <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
             `;
             // Show the popup

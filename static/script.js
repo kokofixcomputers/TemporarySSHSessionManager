@@ -7,7 +7,7 @@ function openModal() {
 function closeModal() {
     modal.style.display = "none";
 }
-span.onclick = closeModal;
+span.onclick = closeModal();
 
 // Close the modal when clicking outside of it
 window.onclick = function(event) {

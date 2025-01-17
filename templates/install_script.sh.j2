@@ -1,0 +1,61 @@
+#!/bin/sh
+
+BASH_PROFILE="/config/.bash_profile"
+BASH_RC="/config/.bashrc"
+
+# Update the package index
+apk update
+
+# Install Python 3, pip, curl, and gcc
+apk add --no-cache python3 py3-pip curl
+apk add gcc python3-dev musl-dev linux-headers
+
+# Verify the installation
+python3 --version
+pip3 --version
+curl --version
+
+# Create the directory for the virtual environment if it doesn't exist
+mkdir -p /etc/venv
+
+# Create a virtual environment in /etc/venv
+python3 -m venv /etc/venv
+
+# Activate the virtual environment
+. /etc/venv/bin/activate
+
+if [ ! -f "$BASH_RC" ]; then
+    echo "Creating $BASH_RC and adding 'echo \"hi\"'"
+    echo '. /etc/venv/bin/activate' > "$BASH_RC"
+    echo 'nohup python3 /etc/agent/agent.py > /dev/tty 2>&1 &' >> "$BASH_RC"
+    echo 'echo "hi"' >> "$BASH_RC"
+else
+    echo "$BASH_RC already exists."
+fi
+
+if [ ! -f "$BASH_PROFILE" ]; then
+    echo "Creating $BASH_PROFILE and adding sourcing for .bashrc"
+    echo 'if [ -f /config/.bashrc ]; then' > "$BASH_PROFILE"
+    echo '    . /config/.bashrc' >> "$BASH_PROFILE"
+    echo 'fi' >> "$BASH_PROFILE"
+else
+    echo "$BASH_PROFILE already exists."
+fi
+
+# Verify that the virtual environment is activated and pip is available
+pip --version
+pip install websockets requests psutil
+
+# Create the directory for the agent if it doesn't exist
+mkdir -p /etc/agent
+
+curl -o /etc/agent/agent.py {{ url }}/agent/download
+
+echo "Virtual environment 'venv' created and activated at /etc/venv."
+echo "Downloaded content from {{ url }}/agent/download to /etc/agent/agent.py."
+
+echo "Setting up Coloured environment"
+echo "alias ls='ls --color=auto'" >> /etc/bash.bashrc
+echo "export PS1='\\[\\e[32m\\]\\u@\\h:\\[\\e[34m\\]\\w\\[\\e[0m\\]\\$ '" >> /etc/bash.bashrc
+export LS_COLORS='di=34:fi=0:ln=36:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=37;41:sg=30;43'
+echo "Install Script Complete"

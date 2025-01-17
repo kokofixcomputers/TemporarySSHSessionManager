@@ -2,6 +2,10 @@ import asyncio
 import websockets
 import threading
 import json
+import configurationlib
+
+# Load the configuration file
+config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
 
 # Dictionary to hold connected agents with their unique IDs
 connected_agents = {}
@@ -36,7 +40,7 @@ async def handler(websocket, path):
         print(f"Agent {agent_id} disconnected")
 
 async def start_server():
-    async with websockets.serve(handler, "0.0.0.0", 8765):
+    async with websockets.serve(handler, "0.0.0.0", config.get()['AGENT_PORT']):
         print("WebSocket server started on ws://0.0.0.0:8765")
         await asyncio.Future()  # Run forever
         

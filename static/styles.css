@@ -51,7 +51,20 @@
     color: #7d7d7d; /* Lighter text color for visibility */
     cursor: not-allowed; /* Change cursor to indicate non-interactivity */
     opacity: 0.6; /* Slightly transparent to indicate disabled state */
-}
+  }
+
+  .restart-btn {
+    padding: 10px 20px;
+    background-color: #ffcc00 !important; /* Bright yellow */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .restart-btn:hover {
+      background-color: #ffb300 !important; /* Darker yellow/orange */
+  }
 
   .redbutton {
     padding: 10px 20px;

@@ -143,6 +143,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -150,12 +151,19 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           html += '</ul>';
           containersDiv.innerHTML = html;
   
-          // Add event listeners to delete buttons
+          // Add event listeners to buttons
           const deleteBtns = document.getElementsByClassName('delete-btn');
           for (let i = 0; i < deleteBtns.length; i++) {
             deleteBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               deleteContainer(containerId);
+            });
+          }
+          const restartBtns = document.getElementsByClassName('restart-btn');
+          for (let i = 0; i < deleteBtns.length; i++) {
+            restartBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              restartContainer(containerId);
             });
           }
         } else {
@@ -182,6 +190,24 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         .catch(error => {
           console.error('Error deleting container:', error);
           alert('Error deleting container. Please try again.');
+        });
+    }
+  }
+
+  function restartContainer(containerId) {
+    if (confirm('Are you sure you want to restart this container?')) {
+      fetch(`/container/restart?id=${containerId}`, { method: 'POST' })
+        .then(response => {
+          if (response.ok) {
+            refreshContainers();
+          } else {
+            console.error('Error restarting container:', response.statusText);
+            alert('Error restarting container. Please try again.');
+          }
+        })
+        .catch(error => {
+          console.error('Error restarting container:', error);
+          alert('Error restarting container. Please try again.');
         });
     }
   }

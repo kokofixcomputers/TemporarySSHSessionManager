@@ -32,5 +32,6 @@ def init():
     config.save()['WEB_DASHBORD_PORT'] = 2271
     config.save()['STARTING_PORT_FOR_CONTAINERS'] = 2280
     config.save()['ENDING_PORT_FOR_CONTAINERS'] = 2599
+    config.save()['AGENT_PORT'] = 8765
     config.save()['INSTALL_AGENT_INTO_CONTAINERS_FOR_MANAGEMENT'] = True
     config.save()

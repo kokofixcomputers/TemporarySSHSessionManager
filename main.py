@@ -4,6 +4,7 @@ import requests
 import sqlite3
 import base64
 import server
+from jinja2 import Environment, FileSystemLoader # Don't need to put into requirements file because it's required by flask already.
 from urllib.parse import urlparse
 from waitress import serve
 import configurationlib
@@ -28,6 +29,8 @@ except:
     print(colors.fg.green + "Configuration file created. Please restart the application." + colors.reset)
     exit(0)
     
+# Define Jinja2 Env
+env = Environment(loader=FileSystemLoader('templates'))
 
 try:    
     DEBUG = config.get()['DEBUG_MODE']
@@ -91,6 +94,7 @@ def create_database():
     debug_print("Creating database if not exists...", colors.fg.green)
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
+    c.execute("ALTER TABLE containers ADD COLUMN dev_port INTEGER;") # TODO: add pre-script and post-script to run before and after running this
     c.execute('''CREATE TABLE IF NOT EXISTS containers
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                   name TEXT,
@@ -121,63 +125,12 @@ def home():
     
 @app.route('/install')
 def install():
+    if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
+        return jsonify({"error": "Unauthorized"}), 401
     url = request.url_root
-    script = f'''#!/bin/sh
-
-BASH_PROFILE="/config/.bash_profile"
-BASH_RC="/config/.bashrc"
-
-# Update the package index
-apk update
-
-# Install Python 3, pip, curl, and gcc
-apk add --no-cache python3 py3-pip curl
-apk add gcc python3-dev musl-dev linux-headers
-
-# Verify the installation
-python3 --version
-pip3 --version
-curl --version
-
-# Create the directory for the virtual environment if it doesn't exist
-mkdir -p /etc/venv
-
-# Create a virtual environment in /etc/venv
-python3 -m venv /etc/venv
-
-# Activate the virtual environment
-. /etc/venv/bin/activate
-
-if [ ! -f "$BASH_RC" ]; then
-    echo "Creating $BASH_RC and adding 'echo \"hi\"'"
-    echo '. /etc/venv/bin/activate' > "$BASH_RC"
-    echo 'nohup python3 /etc/agent/agent.py > /dev/tty 2>&1 &' >> "$BASH_RC"
-    echo 'echo "hi"' >> "$BASH_RC"
-else
-    echo "$BASH_RC already exists."
-fi
-
-if [ ! -f "$BASH_PROFILE" ]; then
-    echo "Creating $BASH_PROFILE and adding sourcing for .bashrc"
-    echo 'if [ -f /config/.bashrc ]; then' > "$BASH_PROFILE"
-    echo '    . /config/.bashrc' >> "$BASH_PROFILE"
-    echo 'fi' >> "$BASH_PROFILE"
-else
-    echo "$BASH_PROFILE already exists."
-fi
-
-# Verify that the virtual environment is activated and pip is available
-pip --version
-pip install websockets requests psutil
-
-# Create the directory for the agent if it doesn't exist
-mkdir -p /etc/agent
-
-curl -o /etc/agent/agent.py {url}/agent/download
-
-echo "Virtual environment 'venv' created and activated at /etc/venv."
-echo "Downloaded content from {url}/agent/download to /etc/agent/agent.py."'''
-    return Response(script, mimetype='text/plain')
+    template = env.get_template('script.sh.j2')
+    rendered_script = template.render(url=url) # Render the script.
+    return Response(rendered_script, mimetype='text/plain')
 
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
@@ -192,14 +145,37 @@ def create_container_route():
 
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
-    name, username, password, port = handler.create_container(url + "/install", start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']))
+    name, username, password, port, exposed_port = handler.create_container(url + '''/install?token="stm_NDbBshvFzKZLlOuhY1OPcS"''', start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS'])) # TODO: Add non-static token.
     if name is not None:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
-        c.execute("INSERT INTO containers (name, username, password, user, port) VALUES (?, ?, ?, ?, ?)", (name, username, password, session['username'], port))
+        c.execute("INSERT INTO containers (name, username, password, user, port, dev_port) VALUES (?, ?, ?, ?, ?, ?)", (name, username, password, session['username'], port, exposed_port))
         conn.commit()
         conn.close()
-    return jsonify({"name": name, "username": username, "hostname": base_url_no_scheme, "port": f"{port}", "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
+    return jsonify({"name": name, "username": username, "hostname": base_url_no_scheme, "port": f"{port}", "exposed_port": exposed_port, "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
+
+@app.route('/container/restart', methods=['POST'])
+def restart_container():
+    user = session.get('username')
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
+    if not is_authorized(session['username']):
+        return jsonify({"error": "You are not authorized to restart containers."}), 403
+    
+    # Checking if the user has access to the container using the username
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    perms_check = c.execute("SELECT user FROM containers WHERE name=? AND user=?", (request.args.get('id'),user)).fetchone()
+    if perms_check is None:
+        return jsonify({"error": "You are not authorized to restart this container or this container never existed."}), 403
+    
+    
+    container_name = request.args.get('id')
+    if container_name:
+        handler.restart_container(container_name)
+        return jsonify({"message": "Container restarted."})
+    else:
+        return jsonify({"error": "No container ID provided."}), 400
 
 @app.route('/auth')
 def auth():
@@ -239,7 +215,7 @@ def auth_callback():
 @app.route('/agent/handshake')
 def agent_handshake():
     # TODO: Add port and scheme changing from config
-    return jsonify({"message": "OK", "code": 200, "port": 8765, "scheme": "ws"})
+    return jsonify({"message": "OK", "code": 200, "port": config.get()['AGENT_PORT'], "scheme": "ws"})
 
 @app.route('/agent/download')
 def download_agent():
@@ -322,9 +298,9 @@ def get_user_containers():
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
         if config.get()['ALLOW_ADMIN_TO_ACCESS_USER_CONTAINERS'] and is_admin(user):
-            c.execute("SELECT name, username, password, port FROM containers")
+            c.execute("SELECT name, username, password, port, dev_port FROM containers")
         else:
-            c.execute("SELECT name, username, password, port FROM containers WHERE user=?", (user,))
+            c.execute("SELECT name, username, password, port, dev_port FROM containers WHERE user=?", (user,))
         containers = c.fetchall()
         conn.close()
     except sqlite3.Error as e:
@@ -332,9 +308,9 @@ def get_user_containers():
         return jsonify([]), 500
 
     if containers:
-        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3], "hostname": base_url_no_scheme} for container in containers])
+        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3], "exposed_port": container[4], "hostname": base_url_no_scheme} for container in containers])
     else:
-        return jsonify([])
+        return jsonify([]), 500
     
 @app.route('/get_connection_details', methods=['GET'])
 def get_connection_details():

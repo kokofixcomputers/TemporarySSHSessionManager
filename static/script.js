@@ -1,6 +1,8 @@
 // Declare modal and span variables globally
 var modal;
 var span;
+var modal_create;
+var span_create;
 
 // Function to open the modal
 function openModal() {
@@ -8,11 +10,21 @@ function openModal() {
         modal.style.display = "block";
     }
 }
+function openModalCreate() {
+    if (modal_create) {
+        modal_create.style.display = "block";
+    }
+}
 
 // Function to close the modal
 function closeModal() {
     if (modal) {
         modal.style.display = "none";
+    }
+}
+function closeModalCreate() {
+    if (modal_create) {
+        modal_create.style.display = "none";
     }
 }
 
@@ -31,7 +43,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
-
+document.addEventListener("DOMContentLoaded", function() {
+    modal_create = document.getElementById("myModalCreate");
+    span_create = document.getElementsByClassName("close")[0];
+    // Close the modal when the close button is clicked
+    span_create.onclick = closeModalCreate;
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == modal_create) {
+            closeModalCreate();
+        }
+    }
+});
 
 
 
@@ -42,6 +65,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     if (generateSessionBtn.disabled) {
         return; // Exit the function if the element is disabled
     }
+    openModalCreate();
     const xhr = new XMLHttpRequest();
     document.getElementById('result').innerHTML = `
           <p>Generating session... Do not click the above button again. This might take a few minutes.</p>
@@ -51,6 +75,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
   
     xhr.onload = function () {
+      closeModalCreate();
       if (xhr.status >= 200 && xhr.status < 300) {
         const response = JSON.parse(xhr.responseText);
         document.getElementById("generateSessionBtn").disabled = false;
@@ -63,6 +88,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     };
   
     xhr.onerror = function () {
+      closeModalCreate();
       console.error('Request failed');
       document.getElementById('result').innerHTML = '<p>Request failed. Please check your connection.</p>';
     };

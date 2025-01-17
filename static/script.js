@@ -1,3 +1,23 @@
+// Modal Code
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
+function openModal() {
+    modal.style.display = "block";
+}
+function closeModal() {
+    modal.style.display = "none";
+}
+span.onclick = closeModal;
+
+// Close the modal when clicking outside of it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+
+
+
 document.getElementById('generateSessionBtn').addEventListener('click', function () {
     const generateSessionBtn = document.getElementById('generateSessionBtn');
 
@@ -60,7 +80,11 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      {% if active %}
+        <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      {% else %}
+        <button id="restart-btn-${container.name}" class="restart-btn" disabled>Restart</button>
+      {% endif %}
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -107,7 +131,11 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      {% if active %}
+        <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      {% else %}
+        <button id="restart-btn-${container.name}" class="restart-btn" disabled>Restart</button>
+      {% endif %}
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -159,7 +187,11 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      {% if active %}
+        <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      {% else %}
+        <button id="restart-btn-${container.name}" class="restart-btn" disabled>Restart</button>
+      {% endif %}
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -212,8 +244,10 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
 
   function restartContainer(containerId) {
     if (confirm('Are you sure you want to restart this container?')) {
+      openModal();
       fetch(`/container/restart?id=${containerId}`, { method: 'POST' })
         .then(response => {
+          closeModal();
           if (response.ok) {
             refreshContainers();
           } else {
@@ -222,8 +256,9 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           }
         })
         .catch(error => {
+          closeModal();
           console.error('Error restarting container:', error);
-          alert('Error restarting container. Please try again.');
+          alert('Error restarting container. Please try again. Check console logs for more details.');
         });
     }
   }
@@ -251,6 +286,7 @@ function openConnectionPopup(containerId) {
                 <strong>Hostname:</strong> ${data.hostname}<br>
                 <strong>Port:</strong> ${data.port}<br>
                 <strong>Development Port:</strong> 80->${data.exposed_port}<br>
+                <strong>Active?</strong> ${data.active ? 'Yes' : 'No'}<br>
                 <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
             `;
             // Show the popup

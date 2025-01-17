@@ -94,7 +94,7 @@ def create_database():
     debug_print("Creating database if not exists...", colors.fg.green)
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    #c.execute("ALTER TABLE containers ADD COLUMN dev_port INTEGER;") # TODO: add pre-script and post-script to run before and after running this
+    #c.execute("ALTER TABLE containers ADD COLUMN active INTEGER;") # TODO: add pre-script and post-script to run before and after running this
     c.execute('''CREATE TABLE IF NOT EXISTS containers
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                   name TEXT,
@@ -102,6 +102,7 @@ def create_database():
                   password TEXT,
                   user TEXT,
                   port INTEGER,
+                  active INTEGER,
                   dev_port INTEGER)''')
     c.execute('''CREATE TABLE IF NOT EXISTS users
               (id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -150,7 +151,7 @@ def create_container_route():
     if name is not None:
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
-        c.execute("INSERT INTO containers (name, username, password, user, port, dev_port) VALUES (?, ?, ?, ?, ?, ?)", (name, username, password, session['username'], port, exposed_port))
+        c.execute("INSERT INTO containers (name, username, password, user, port, dev_port, active) VALUES (?, ?, ?, ?, ?, ?, ?)", (name, username, password, session['username'], port, exposed_port, True))
         conn.commit()
         conn.close()
     return jsonify({"name": name, "username": username, "hostname": base_url_no_scheme, "port": f"{port}", "exposed_port": exposed_port, "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
@@ -173,7 +174,9 @@ def restart_container():
     
     container_name = request.args.get('id')
     if container_name:
+        c.execute("UPDATE containers SET active = ? WHERE name = ?", (False, request.args.get('id'))).fetchone()
         handler.restart_container(container_name)
+        c.execute("UPDATE containers SET active = ? WHERE name = ?", (True, request.args.get('id'))).fetchone()
         return jsonify({"message": "Container restarted."})
     else:
         return jsonify({"error": "No container ID provided."}), 400
@@ -299,9 +302,9 @@ def get_user_containers():
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
         if config.get()['ALLOW_ADMIN_TO_ACCESS_USER_CONTAINERS'] and is_admin(user):
-            c.execute("SELECT name, username, password, port, dev_port FROM containers")
+            c.execute("SELECT name, username, password, port, dev_port, active FROM containers")
         else:
-            c.execute("SELECT name, username, password, port, dev_port FROM containers WHERE user=?", (user,))
+            c.execute("SELECT name, username, password, port, dev_port, active FROM containers WHERE user=?", (user,))
         containers = c.fetchall()
         conn.close()
     except sqlite3.Error as e:
@@ -309,7 +312,7 @@ def get_user_containers():
         return jsonify([]), 500
 
     if containers:
-        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3], "exposed_port": container[4], "hostname": base_url_no_scheme} for container in containers])
+        return jsonify([{"name": container[0], "username": container[1], "password": container[2], "port": container[3], "exposed_port": container[4], "hostname": base_url_no_scheme, "active": container[5]} for container in containers])
     else:
         return jsonify([]), 500
     
@@ -325,11 +328,11 @@ def get_connection_details():
     id = request.args.get('id')
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    c.execute("SELECT name, username, password, port, dev_port FROM containers WHERE name=? AND user=?",(id, session['username']))
+    c.execute("SELECT name, username, password, port, dev_port, active FROM containers WHERE name=? AND user=?",(id, session['username']))
     container = c.fetchone()
     conn.close()
     if container:
-        return jsonify({"name": container[0], "username": container[1], "exposed_port": container[4],"hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme} -p {container[3]}", "port": container[3]})
+        return jsonify({"name": container[0], "username": container[1], "exposed_port": container[4],"hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme} -p {container[3]}", "port": container[3], "active": container[5]})
     else:
         return jsonify({"error": "Container not found."}), 404
 

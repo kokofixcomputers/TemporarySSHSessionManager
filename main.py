@@ -325,11 +325,11 @@ def get_connection_details():
     id = request.args.get('id')
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    c.execute("SELECT name, username, password, port FROM containers WHERE name=? AND user=?",(id, session['username']))
+    c.execute("SELECT name, username, password, port, dev_port FROM containers WHERE name=? AND user=?",(id, session['username']))
     container = c.fetchone()
     conn.close()
     if container:
-        return jsonify({"name": container[0], "username": container[1], "hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme} -p {container[3]}", "port": container[3]})
+        return jsonify({"name": container[0], "username": container[1], "exposed_port": container[4],"hostname": base_url_no_scheme, "password": container[2], "ssh_command": f"ssh {container[1]}@{base_url_no_scheme} -p {container[3]}", "port": container[3]})
     else:
         return jsonify({"error": "Container not found."}), 404
 

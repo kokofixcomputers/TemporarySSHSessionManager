@@ -162,7 +162,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
             });
           }
           const restartBtns = document.getElementsByClassName('restart-btn');
-          for (let i = 0; i < deleteBtns.length; i++) {
+          for (let i = 0; i < restartBtns.length; i++) {
             restartBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               restartContainer(containerId);

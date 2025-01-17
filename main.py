@@ -94,14 +94,15 @@ def create_database():
     debug_print("Creating database if not exists...", colors.fg.green)
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
-    c.execute("ALTER TABLE containers ADD COLUMN dev_port INTEGER;") # TODO: add pre-script and post-script to run before and after running this
+    #c.execute("ALTER TABLE containers ADD COLUMN dev_port INTEGER;") # TODO: add pre-script and post-script to run before and after running this
     c.execute('''CREATE TABLE IF NOT EXISTS containers
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
                   name TEXT,
                   username TEXT,
                   password TEXT,
                   user TEXT,
-                  port INTEGER)''')
+                  port INTEGER,
+                  dev_port INTEGER)''')
     c.execute('''CREATE TABLE IF NOT EXISTS users
               (id INTEGER PRIMARY KEY AUTOINCREMENT,
                username TEXT)''')

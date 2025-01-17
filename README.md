@@ -1,6 +1,9 @@
 # Temporary SSH Session Manager
 A temporary SSH session manager.
 
+![https://img.shields.io/badge/Commited%20with-Commitify-blue?link=https://github.com/kokofixcomputers/Commitify](https://img.shields.io/badge/Commited%20with-Commitify-blue?link=https://github.com/kokofixcomputers/Commitify)
+
+
 ## Why would you need this?
 Sometimes you have apps or services you need to test. Or just commands that you want to play with and maybe have the possibility to ruin your system. Using a temporary SSH session manager you can do that without having to worry about the consequences. Powered by Docker.
 

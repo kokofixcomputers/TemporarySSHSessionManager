@@ -76,6 +76,13 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           deleteContainer(containerId);
         });
       }
+      const restartBtns = document.getElementsByClassName('restart-btn');
+      for (let i = 0; i < restartBtns.length; i++) {
+        restartBtns[i].addEventListener('click', function () {
+          const containerId = this.id.split('-')[2];
+          restartContainer(containerId);
+        });
+      }
     } else {
       containersDiv.innerHTML = '<p>No containers assigned.</p>';
     }
@@ -109,12 +116,19 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           html += '</ul>';
           containersDiv.innerHTML = html;
   
-          // Add event listeners to delete buttons
+          // Add event listeners to buttons
           const deleteBtns = document.getElementsByClassName('delete-btn');
           for (let i = 0; i < deleteBtns.length; i++) {
             deleteBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               deleteContainer(containerId);
+            });
+          }
+          const restartBtns = document.getElementsByClassName('restart-btn');
+          for (let i = 0; i < restartBtns.length; i++) {
+            restartBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              restartContainer(containerId);
             });
           }
         } else {

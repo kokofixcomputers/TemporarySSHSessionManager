@@ -97,11 +97,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      {% if active %}
-        <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
-      {% else %}
-        <button id="restart-btn-${container.name}" class="restart-btn" disabled>Restart</button>
-      {% endif %}
+      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -148,11 +144,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      {% if active %}
-        <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
-      {% else %}
-        <button id="restart-btn-${container.name}" class="restart-btn" disabled>Restart</button>
-      {% endif %}
+      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;
@@ -204,11 +196,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      {% if active %}
-        <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
-      {% else %}
-        <button id="restart-btn-${container.name}" class="restart-btn" disabled>Restart</button>
-      {% endif %}
+      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
   </li>`;

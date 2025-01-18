@@ -393,15 +393,17 @@ function openConnectionPopup(containerId) {
 
 
             // Tooltip functionality
-            const tooltipContainer = document.getElementsByClassName('tooltip-container');
-            const tooltipContent = document.getElementsByClassName('tooltip-content');
-          
-            tooltipContainer.addEventListener('mouseenter', () => {
-                tooltipContent.style.display = 'block';
-            });
-          
-            tooltipContainer.addEventListener('mouseleave', () => {
-                tooltipContent.style.display = 'none';
+            const tooltipContainers = document.querySelectorAll('.tooltip-container');
+            const tooltipContents = document.querySelectorAll('.tooltip-content');
+
+            tooltipContainers.forEach((container, index) => {
+                container.addEventListener('mouseenter', () => {
+                    tooltipContents[index].style.display = 'block';
+                });
+
+                container.addEventListener('mouseleave', () => {
+                    tooltipContents[index].style.display = 'none';
+                });
             });
         })
         .catch(error => {

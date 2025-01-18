@@ -30,6 +30,18 @@ function openModalConnection() {
     }
 }
 
+const tooltipContainer = document.querySelector('.tooltip-container');
+const tooltipContent = document.querySelector('.tooltip-content');
+
+tooltipContainer.addEventListener('mouseenter', () => {
+    tooltipContent.style.display = 'block';
+});
+
+tooltipContainer.addEventListener('mouseleave', () => {
+    tooltipContent.style.display = 'none';
+});
+
+
 // Function to close the modal
 function closeModal() {
     if (modal) {
@@ -376,7 +388,13 @@ function openConnectionPopup(containerId) {
                 <strong>Password:</strong> ${data.password}<br>
                 <strong>Hostname:</strong> ${data.hostname}<br>
                 <strong>Port:</strong> ${data.port}<br>
-                <strong>Development Port:</strong> 80->${data.exposed_port}<br>
+                <div class="tooltip-wrapper">
+                    <strong>Development Port:</strong> 80->${data.exposed_port}
+                    <div class="tooltip-container">
+                        <span class="question-mark">?</span>
+                        <div class="tooltip-content">Development Port is to expose the port 80 inside the container to port ${data.exposed_port} accessible outside using the current URL.</div>
+                    </div>
+                </div>
                 <strong>Active?</strong> ${data.active ? 'Yes' : 'No'}<br>
                 <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
             `;

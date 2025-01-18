@@ -190,6 +190,53 @@
     width: 20% !important; /* Needed for overwriting the default width */
   }
 
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+  .question-mark {
+    cursor: pointer;
+    font-size: 24px; /* Font size for the question mark */
+    color: #007BFF; /* Modern blue color */
+    font-family: 'Arial', sans-serif; /* Specific font for question mark */
+    
+    /* Styles for the grey background */
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 50%; /* Make it circular */
+    
+    /* Set fixed width and height for a perfect circle */
+    width: 40px; /* Fixed width */
+    height: 40px; /* Fixed height */
+    
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+  }
+
+  .tooltip-content {
+      display: none; /* Hide by default */
+      position: absolute;
+      background-color: #333; /* Dark background */
+      color: #fff; /* White text for contrast */
+      padding: 10px; /* Increased padding for a better look */
+      border-radius: 8px; /* Rounded corners */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+      z-index: 1000;
+      width: 200px; /* Fixed width for consistency */
+      transition: opacity 0.3s ease; /* Smooth transition effect */
+      font-family: 'Arial', sans-serif;
+  }
+
+  .tooltip-container:hover .tooltip-content {
+      display: block; /* Show on hover */
+  }
+
+  .tooltip-wrapper {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+  }
+
   .restart-text {
     font-family: 'Roboto', sans-serif; /* Apply Roboto font */
     font-size: 30px; /* Set font size */

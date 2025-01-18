@@ -62,7 +62,7 @@
 }
 
 /* Close Icon */
-.scoped-container .close {
+.scoped-container .connclose {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -71,7 +71,7 @@
     color: #333333;
 }
 
-.scoped-container .close:hover {
+.scoped-container .connclose:hover {
     color: #ff5c5c; /* Slightly red hover effect for close icon */
 }
 

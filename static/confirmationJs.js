@@ -2,7 +2,7 @@ function confirmModal(message) {
     return new Promise((resolve) => {
         // Get elements
         const confirmModal = document.getElementById('confirmModal');
-        const closeIcon = document.querySelector('.close');
+        const closeIcon = document.querySelector('.connclose');
         const okBtn = document.getElementById('okBtn');
         const cancelBtn = document.getElementById('cancelBtn');
         const connmodalcontent = document.getElementById('connmodal-content');

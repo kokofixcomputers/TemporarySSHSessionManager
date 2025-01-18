@@ -7,6 +7,17 @@ A temporary SSH session manager.
 ## Why would you need this?
 Sometimes you have apps or services you need to test. Or just commands that you want to play with and maybe have the possibility to ruin your system. Using a temporary SSH session manager you can do that without having to worry about the consequences. Powered by Docker.
 
+## Features
+- Create a temporary SSH session
+- Quickly delete the temporary SSH session
+- Easy to use
+- Dockerized
+- Easy to install
+- Subnets (Allow containers to connect to each other)
+- Internet Access (Allow containers to access the internet)
+- Exposed Port (Randomly choose a port from a range to allow access to containers from outside network.)
+- Nice UI
+
 ## Installation
 
 Prerequisites:

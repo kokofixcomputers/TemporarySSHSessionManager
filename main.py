@@ -141,6 +141,8 @@ def create_container_route():
         return jsonify({"error": "You are not logged in."}), 401
     if not is_authorized(session['username']):
         return jsonify({"error": "You are not authorized to create containers."}), 403
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
     # Assuming request.url_root is defined
     url = request.url_root
     parsed_url = urlparse(url)
@@ -161,11 +163,9 @@ def create_container_route():
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
     name, username, password, port, exposed_port = handler.create_container(url + '''/install?token="stm_NDbBshvFzKZLlOuhY1OPcS"''', start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS'])) # TODO: Add non-static token.
     if name is not None:
-        conn = sqlite3.connect('containers.db')
-        c = conn.cursor()
         c.execute("INSERT INTO containers (name, username, password, user, port, dev_port, active) VALUES (?, ?, ?, ?, ?, ?, ?)", (name, username, password, session['username'], port, exposed_port, True))
         conn.commit()
-        conn.close()
+    conn.close()
     return jsonify({"name": name, "username": username, "hostname": base_url_no_scheme, "port": f"{port}", "exposed_port": exposed_port, "password": password, "ssh_command": f"ssh {username}@{base_url_no_scheme} -p {port}"})
 
 @app.route('/container/restart', methods=['POST'])

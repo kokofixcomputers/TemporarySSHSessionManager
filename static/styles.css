@@ -21,6 +21,15 @@
     text-align: center;
   }
 
+  #containers {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap; /* Allows wrapping to the next row if needed */
+    gap: 20px; /* Adds spacing between items */
+    justify-content: center; /* Centers items horizontally */
+  }
+
+
   .result button {
     width: auto; /* Allow button to size based on content */
     margin: 0;

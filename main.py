@@ -12,6 +12,7 @@ import time
 import configuration_manager
 import printedcolors
 import network_setup
+import random
 
 colors = printedcolors.Color
 
@@ -137,6 +138,46 @@ def install():
     rendered_script = template.render(url=url) # Render the script.
     return Response(rendered_script, mimetype='text/plain')
 
+def get_random_port(starting_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), ending_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS'])):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('containers.db')
+    cursor = conn.cursor()
+    
+    # Fetch all existing ports from the 'containers' table
+    cursor.execute("SELECT port FROM containers")
+    existing_ports = {row[0] for row in cursor.fetchall()}
+    
+    # Close the database connection
+    conn.close()
+
+    while True:
+        # Generate a random port number
+        random_port = random.randint(starting_port, ending_port)
+        
+        # Check if the generated port is already in use
+        if random_port not in existing_ports:
+            return random_port
+        
+def get_random_outsider_port(starting_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']) + 1, ending_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS']) + 319):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('containers.db')
+    cursor = conn.cursor()
+    
+    # Fetch all existing ports from the 'containers' table
+    cursor.execute("SELECT dev_port FROM containers")
+    existing_ports = {row[0] for row in cursor.fetchall()}
+    
+    # Close the database connection
+    conn.close()
+
+    while True:
+        # Generate a random port number
+        random_port = random.randint(starting_port, ending_port)
+        
+        # Check if the generated port is already in use
+        if random_port not in existing_ports:
+            return random_port
+
 @app.route('/create_container', methods=['POST'])
 def create_container_route():
     time.sleep(5)
@@ -164,7 +205,7 @@ def create_container_route():
 
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
-    name, username, password, port, exposed_port = handler.create_container(url + '''/install?token="stm_NDbBshvFzKZLlOuhY1OPcS"''', start_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), end_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS'])) # TODO: Add non-static token.
+    name, username, password, port, exposed_port = handler.create_container(url + '''/install?token="stm_NDbBshvFzKZLlOuhY1OPcS"''', port=get_random_port(), outsider_port=get_random_outsider_port()) # TODO: Add non-static token.
     if name is not None:
         c.execute("INSERT INTO containers (name, username, password, user, port, dev_port, active) VALUES (?, ?, ?, ?, ?, ?, ?)", (name, username, password, session['username'], port, exposed_port, True))
         conn.commit()

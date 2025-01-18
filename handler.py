@@ -31,11 +31,9 @@ word_list = [
 ]  # Expanded list of words for username generation
 
 
-def create_container(web_dashboard_host, start_port=2280, end_port=2599):
+def create_container(web_dashboard_host, port, outsider_port):
     username = generate_username(word_list)
     password = generate_password()
-    host_port = generate_random_port(start_port, end_port)
-    outsider_port = generate_random_port(end_port + 1, end_port + 320)
 
     environment_vars = {
         "SUDO_ACCESS": "true",
@@ -56,13 +54,13 @@ def create_container(web_dashboard_host, start_port=2280, end_port=2599):
             environment=environment_vars,
             network="stm",
             hostname=f"{username}@stm",
-            ports={'2222/tcp': host_port, '80': outsider_port}  # Add ports mapping
+            ports={'2222/tcp': port, '80': outsider_port}  # Add ports mapping
         )
     except:
         return None, None, None, None, None
     time.sleep(5)
 
-    return container.name, username, password, host_port, outsider_port
+    return container.name, username, password, port, outsider_port
 
 def restart_container(name):
     try:

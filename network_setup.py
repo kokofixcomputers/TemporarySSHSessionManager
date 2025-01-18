@@ -16,6 +16,5 @@ def setup_network(subnet='192.168.52.0/24', gateway='192.168.52.254'):
     if not existing_networks:
         # Create the network if it does not exist
         network = client.networks.create(network_name, driver="bridge", ipam=ipam_config)
-        print(f'Network {network.id} created with subnet {ipam_pool.subnet} and gateway {ipam_pool.gateway}')
     else:
         print(f'Network {network_name} already exists.')

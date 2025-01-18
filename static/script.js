@@ -305,7 +305,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
             });
           }
         } else {
-          containersDiv.innerHTML = '<p>No containers assigned.</p>';
+          containersDiv.innerHTML = '<center><p>No containers assigned.</p></center>';
         }
       })
       .catch(error => {

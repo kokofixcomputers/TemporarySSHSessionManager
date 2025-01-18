@@ -12,8 +12,8 @@
   }
   
   .container {
-    max-width: calc(50% - 40px);
-    margin: 60px auto;
+    max-width: calc(50% - 40px); /* Adjust for margins */
+    margin: 60px auto; /* Spacing between containers */
     padding: 20px;
     background: white;
     border-radius: 8px;
@@ -106,21 +106,20 @@
     margin: 0;
     display: flex; /* Use Flexbox for layout */
     flex-wrap: wrap; /* Allow items to wrap to the next row if needed */
-    gap: 20px; /* Add consistent spacing between items */
-    justify-content: space-between; /* Distribute items evenly with spacing */
+    gap: 81px; /* Add consistent spacing between items */
   }
 
   .container-list li {
-      flex: 0 1 calc(48%); /* Each item takes ~48% of the row width */
-      margin: 0; /* Remove unnecessary margin */
-      padding: 10px;
-      border: 1px solid #dddddd;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-      display: flex;
-      flex-direction: column; /* Stack content vertically */
-      align-items: center; /* Center-align content */
-      box-sizing: border-box; /* Include padding and border in width calculation */
+    flex: 0 1 calc(30% - 20px); /* Each item takes ~30% of the row width minus gap */
+    margin: 0; /* Remove unnecessary margin */
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    align-items: center; /* Center-align content */
+    box-sizing: border-box; /* Include padding and border in width calculation */
   }
 
   

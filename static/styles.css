@@ -193,7 +193,7 @@
   .tooltip-container {
     position: relative;
     display: inline-block;
-}
+  }
 
   .question-mark {
     cursor: pointer;
@@ -206,8 +206,8 @@
     border-radius: 50%; /* Make it circular */
     
     /* Set fixed width and height for a perfect circle */
-    width: 40px; /* Fixed width */
-    height: 40px; /* Fixed height */
+    width: 30px; /* Fixed width */
+    height: 30px; /* Fixed height */
     
     display: flex; /* Use flexbox for centering */
     align-items: center; /* Center vertically */

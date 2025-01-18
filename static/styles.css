@@ -24,8 +24,8 @@
   #containers {
     display: flex;
     max-width: 100%;
+    padding: 0;
     flex-wrap: wrap; /* Allows wrapping to the next row if needed */
-    gap: 20px; /* Adds spacing between items */
     justify-content: center; /* Centers items horizontally */
   }
 

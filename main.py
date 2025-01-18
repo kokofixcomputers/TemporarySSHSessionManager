@@ -408,6 +408,7 @@ def delete_containers():
     handler.delete_container(id)
     conn.commit()
     conn.close()
+    time.sleep(2)
     return jsonify({"success": True})
 
 @app.route('/admin')

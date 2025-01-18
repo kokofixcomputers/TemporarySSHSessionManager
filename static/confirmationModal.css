@@ -1,0 +1,92 @@
+/* Scoped Container */
+.scoped-container {
+    font-family: 'Inter', sans-serif; /* Modern font */
+}
+
+/* Modal Wrapper for centering content */
+.scoped-container .modal-wrapper {
+    font-family: 'Inter', sans-serif; /* Modern font */
+}
+
+/* Modern Button Styles */
+.scoped-container .modern-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.scoped-container .modern-btn.primary {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+.scoped-container .modern-btn.primary:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+.scoped-container .modern-btn.secondary {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.scoped-container .modern-btn.secondary:hover {
+    background-color: #e53935; /* Darker red */
+}
+
+/* Modal Styles */
+.scoped-container .modal {
+    font-family: 'Inter', sans-serif; /* Modern font */
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Black with transparency */
+}
+
+/* Modal Content Box */
+.scoped-container .modal-content {
+    position: relative;
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px; /* Smooth rounded corners */
+    width: 90%;
+    max-width: 400px; /* Responsive size */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Close Icon */
+.scoped-container .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.scoped-container .close:hover {
+    color: #ff5c5c; /* Slightly red hover effect for close icon */
+}
+
+/* Modal Heading and Text */
+.scoped-container .modal-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.scoped-container .modal-content p {
+    font-size: 16px;
+}
+
+/* Button Group Styling Inside Modal */
+.scoped-container .button-group {
+    display: flex;
+    justify-content: space-between;
+}

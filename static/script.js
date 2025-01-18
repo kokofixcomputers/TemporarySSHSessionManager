@@ -315,24 +315,26 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
   };
   
   function deleteContainer(containerId) {
-    if (confirm('Are you sure you want to delete this container?')) {
-      openModalDelete();
-      fetch(`/delete_container?id=${containerId}`, { method: 'DELETE' })
-        .then(response => {
-          closeModalDelete();
-          if (response.ok) {
-            refreshContainers();
-          } else {
-            console.error('Error deleting container:', response.statusText);
+    confirmModal('Are you sure you want to delete this container?').then((confirmed) => {
+      if (confirmed) {
+        openModalDelete();
+        fetch(`/delete_container?id=${containerId}`, { method: 'DELETE' })
+          .then(response => {
+            closeModalDelete();
+            if (response.ok) {
+              refreshContainers();
+            } else {
+              console.error('Error deleting container:', response.statusText);
+              alert('Error deleting container. Please try again.');
+            }
+          })
+          .catch(error => {
+            closeModalDelete();
+            console.error('Error deleting container:', error);
             alert('Error deleting container. Please try again.');
-          }
-        })
-        .catch(error => {
-          closeModalDelete();
-          console.error('Error deleting container:', error);
-          alert('Error deleting container. Please try again.');
-        });
-    }
+          });
+      }
+    });
   }
 
   function restartContainer(containerId) {

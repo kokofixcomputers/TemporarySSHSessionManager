@@ -6,6 +6,7 @@
     <title>SSH Temporary Session Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/confirmationModal.css" />
   </head>
   <body>
     <div class="container">
@@ -34,6 +35,20 @@
           <div id="connectionDetails"></div> <!-- This will be populated dynamically -->
       </div>
   </div>
+  <div class="scoped-container">
+    <div id="confirmModal" class="modal">
+      <div class="modal-content" id="connmodal-content">
+          <span class="close">&times;</span>
+          <h2>Confirmation</h2>
+          <p></p> <!-- This will be filled by confirmModal -->
+          <div class="button-group">
+              <button id="okBtn" class="modern-btn primary">OK</button>
+              <button id="cancelBtn" class="modern-btn secondary">Cancel</button>
+          </div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/confirmationJs.js"></script>
   <script src="/static/script.js"></script>
   <div id="myModal" class="modal">
     <div class="modal-content">

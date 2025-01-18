@@ -23,6 +23,7 @@ function openModalCreate() {
 }
 function openModalDelete() {
     if (modal_delete) {
+        console.log("Opening modal_delete");
         modal_delete.style.display = "block";
     }
 }
@@ -45,6 +46,7 @@ function closeModalCreate() {
 }
 function closeModalDelete() {
     if (modal_delete) {
+      console.log("Closing modal_delete");
         modal_delete.style.display = "none";
     }
 }

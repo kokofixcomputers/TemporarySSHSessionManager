@@ -12,8 +12,8 @@
   }
   
   .container {
-    max-width: 50%;
-    margin: 50px auto;
+    max-width: calc(50% - 40px);
+    margin: 60px auto;
     padding: 20px;
     background: white;
     border-radius: 8px;
@@ -101,23 +101,28 @@
   }
   
   .container-list {
-    list-style: none;
+    list-style: none; /* Remove bullets */
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping */
+    display: flex; /* Use Flexbox for layout */
+    flex-wrap: wrap; /* Allow items to wrap to the next row if needed */
+    gap: 20px; /* Add consistent spacing between items */
+    justify-content: space-between; /* Distribute items evenly with spacing */
   }
-  
+
   .container-list li {
-    margin: 3.7%; /* Space between items */
-    padding: 10px;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    display: flex;
-    flex-direction: column; /* Stack content vertically */
-    align-items: center; /* Center items horizontally */
+      flex: 0 1 calc(48%); /* Each item takes ~48% of the row width */
+      margin: 0; /* Remove unnecessary margin */
+      padding: 10px;
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column; /* Stack content vertically */
+      align-items: center; /* Center-align content */
+      box-sizing: border-box; /* Include padding and border in width calculation */
   }
+
   
   .button-container {
     display: flex;

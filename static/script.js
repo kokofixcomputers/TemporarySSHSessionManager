@@ -175,11 +175,11 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         html += `
               <li>
     <h3>Session Details:</h3>
-    <p><strong>Name:</strong> ${container.name}</p>
-    <p><strong>Username:</strong> ${container.username}</p>
-    <p><strong>Password:</strong> ${container.password}</p>
-    <p><strong>Hostname:</strong> ${container.hostname}</p>
-    <p><strong>Port:</strong> ${container.port}</p>
+    <p><strong>Name:</strong> ${container.name}</p><br>
+    <p><strong>Username:</strong> ${container.username}</p><br>
+    <p><strong>Password:</strong> ${container.password}</p><br>
+    <p><strong>Hostname:</strong> ${container.hostname}</p><br>
+    <p><strong>Port:</strong> ${container.port}</p><br>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>

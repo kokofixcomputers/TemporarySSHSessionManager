@@ -11,8 +11,11 @@ import configurationlib
 import time
 import configuration_manager
 import printedcolors
+import network_setup
 
 colors = printedcolors.Color
+
+network_setup.setup_network()
 
 config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
 detect_already_configured = configurationlib.Instance("DELETE_THIS_FILE_TO_RESET_CONFIGURATION.py", format=configurationlib.Format.PYTHON)

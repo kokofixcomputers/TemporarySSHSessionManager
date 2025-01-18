@@ -54,6 +54,7 @@ def create_container(web_dashboard_host, start_port=2280, end_port=2599):
             "kokofixcomputers/docker-openssh-server-fork:latest",
             detach=True, # REQUIRED for running in the background
             environment=environment_vars,
+            network="stm",
             hostname=f"{username}@stm",
             ports={'2222/tcp': host_port, '80': outsider_port}  # Add ports mapping
         )

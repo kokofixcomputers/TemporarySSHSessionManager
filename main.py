@@ -127,8 +127,8 @@ def home():
     
 @app.route('/install')
 def install():
-    if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
-        return jsonify({"error": "Unauthorized"}), 401
+    #if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
+    #    return jsonify({"error": "Unauthorized"}), 401
     url = request.url_root
     template = env.get_template('install_script.sh.j2')
     rendered_script = template.render(url=url) # Render the script.

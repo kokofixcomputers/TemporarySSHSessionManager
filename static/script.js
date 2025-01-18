@@ -7,6 +7,8 @@ var modal_delete;
 var span_delete;
 var modal_connection;
 var span_connection;
+var tooltipContainer;
+var tooltipContent;
 
 // Function to open the modal
 function openModal() {
@@ -29,18 +31,6 @@ function openModalConnection() {
         modal_connection.style.display = "block";
     }
 }
-
-const tooltipContainer = document.querySelector('.tooltip-container');
-const tooltipContent = document.querySelector('.tooltip-content');
-
-tooltipContainer.addEventListener('mouseenter', () => {
-    tooltipContent.style.display = 'block';
-});
-
-tooltipContainer.addEventListener('mouseleave', () => {
-    tooltipContent.style.display = 'none';
-});
-
 
 // Function to close the modal
 function closeModal() {
@@ -400,6 +390,19 @@ function openConnectionPopup(containerId) {
             `;
             // Show the popup
             openModalConnection()
+
+
+            // Tooltip functionality
+            const tooltipContainer = document.getElementsByClassName('tooltip-container');
+            const tooltipContent = document.getElementsByClassName('tooltip-content');
+          
+            tooltipContainer.addEventListener('mouseenter', () => {
+                tooltipContent.style.display = 'block';
+            });
+          
+            tooltipContainer.addEventListener('mouseleave', () => {
+                tooltipContent.style.display = 'none';
+            });
         })
         .catch(error => {
             console.error('Error fetching connection details:', error);

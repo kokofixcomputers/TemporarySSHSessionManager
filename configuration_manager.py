@@ -34,4 +34,5 @@ def init():
     config.save()['ENDING_PORT_FOR_CONTAINERS'] = 2599
     config.save()['AGENT_PORT'] = 8765
     config.save()['INSTALL_AGENT_INTO_CONTAINERS_FOR_MANAGEMENT'] = True
+    config.save()['MAX_NUMBER_OF_CONTAINERS_PER_USER'] = 10
     config.save()

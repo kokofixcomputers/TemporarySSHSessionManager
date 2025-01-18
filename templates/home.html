@@ -27,38 +27,41 @@
         <h3>Your Containers:</h3>
       </div>
     </div>
-    <div id="connectionPopup" class="popup">
-      <div class="popup-content">
-          <span class="close-popup">&times;</span>
-          <h2>Connection Details</h2>
+    <div id="myModalConnection" class="modal">
+      <div class="modal-content modal-conndetails">
+          <span class="close">&times;</span>
+          <p class="restart-text">Connection Details:</p>
           <div id="connectionDetails"></div> <!-- This will be populated dynamically -->
       </div>
   </div>
-    <script src="/static/script.js"></script>
+  <script src="/static/script.js"></script>
   <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-      <center>
-        <p class="restart-text">Restarting Container...</p>
-      <center><div class="spinner"></div></center>
+        <center>
+          <p class="restart-text">Restarting Container...</p>
+          <div class="spinner"></div>
+        </center>
 
     </div>
   </div>
   <div id="myModalCreate" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-      <center>
-        <p class="restart-text">Creating Container...</p>
-        <p>This might take a while.</p>
-      <center><div class="spinner"></div></center>
+        <center>
+          <p class="restart-text">Creating Container...</p>
+          <p>This might take a while.</p>
+          <div class="spinner"></div>
+        </center>
 
     </div>
     <div id="myModalDelete" class="modal">
       <div class="modal-content">
           <span class="close">&times;</span>
-        <center>
-          <p class="restart-text">Deleting Container...</p>
-        <center><div class="spinner"></div></center>
+          <center>
+            <p class="restart-text">Deleting Container...</p>
+            <div class="spinner"></div>
+          </center>
   
       </div>
   </div>

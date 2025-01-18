@@ -144,6 +144,18 @@ def create_container_route():
     # Assuming request.url_root is defined
     url = request.url_root
     parsed_url = urlparse(url)
+    
+    c.execute("SELECT user FROM containers WHERE user=?", (session['username'],))
+
+    # Fetch all results
+    rows = c.fetchall()
+
+    # Count the number of rows
+    row_count = len(rows)
+    if config.get()['MAX_CONTAINERS_PER_USER'] == 0:
+        pass # No limit
+    elif row_count >= config.get()['MAX_CONTAINERS_PER_USER']:
+        return jsonify({"error": "You have reached the maximum number of containers per user.", "code": 1002}), 403
 
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
@@ -177,8 +189,11 @@ def restart_container():
         c.execute("UPDATE containers SET active = ? WHERE name = ?", (False, request.args.get('id'))).fetchone()
         handler.restart_container(container_name)
         c.execute("UPDATE containers SET active = ? WHERE name = ?", (True, request.args.get('id'))).fetchone()
+        conn.commit()
+        conn.close()
         return jsonify({"message": "Container restarted."})
     else:
+        conn.close()
         return jsonify({"error": "No container ID provided."}), 400
 
 @app.route('/auth')

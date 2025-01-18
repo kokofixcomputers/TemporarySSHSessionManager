@@ -5,6 +5,8 @@ var modal_create;
 var span_create;
 var modal_delete;
 var span_delete;
+var modal_connection;
+var span_connection;
 
 // Function to open the modal
 function openModal() {
@@ -22,6 +24,11 @@ function openModalDelete() {
         modal_delete.style.display = "block";
     }
 }
+function openModalConnection() {
+    if (modal_connection) {
+        modal_connection.style.display = "block";
+    }
+}
 
 // Function to close the modal
 function closeModal() {
@@ -37,6 +44,11 @@ function closeModalCreate() {
 function closeModalDelete() {
     if (modal_delete) {
         modal_delete.style.display = "none";
+    }
+}
+function closeModalConnection() {
+    if (modal_connection) {
+        modal_connection.style.display = "none";
     }
 }
 
@@ -79,6 +91,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+document.addEventListener("DOMContentLoaded", function() {
+    modal_connection = document.getElementById("myModalConnection");
+    span_connection = document.getElementsByClassName("close")[0];
+    // Close the modal when the close button is clicked
+    span_connection.onclick = closeModalConnection;
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == modal_connection) {
+            closeModalConnection();
+        }
+    }
+});
 
 
 
@@ -106,6 +130,15 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         displayResult(response);
         refreshContainers();
       } else {
+        const response = JSON.parse(xhr.responseText);
+        // Find out the error code and display the corresponding error message
+        if (response.code === 1002) { // MAX_ERROR
+          alert('You have reached the maximum number of containers. Please delete one to create another.');
+        } else if (response.code === 2) { // UNKNOWN_ERROR
+          document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
+        } else { // UNKNOWN_ERROR
+          document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
+        }
         console.error('Error:', xhr.responseText);
         document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
       }
@@ -348,12 +381,12 @@ function openConnectionPopup(containerId) {
                 <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
             `;
             // Show the popup
-            popup.style.display = "block";
+            openModalConnection()
         })
         .catch(error => {
             console.error('Error fetching connection details:', error);
-            document.getElementById('connectionDetails').innerHTML = '<p>Error fetching connection details.</p>';
-            popup.style.display = "block"; // Show popup even if there's an error
+            document.getElementById('connectionDetails').innerHTML = '<p>Error fetching connection details. Please check your internet connection.</p>';
+            openModalConnection()
         });
 }
 
@@ -364,15 +397,3 @@ document.addEventListener('click', function(event) {
         openConnectionPopup(containerId); // Open new connection details popup
     }
 });
-
-// When the user clicks on <span> (x), close the popup
-closePopup.onclick = function() {
-    popup.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the popup, close it
-window.onclick = function(event) {
-    if (event.target == popup) {
-        popup.style.display = "none";
-    }
-};

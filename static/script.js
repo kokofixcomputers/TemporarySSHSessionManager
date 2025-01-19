@@ -234,7 +234,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
-      <br>
+    </div>
+    <div class="button-container">
       <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
       <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
@@ -298,7 +299,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
-      <br>
+    </div>
+    <div class="button-container">
       <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
       <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
@@ -367,7 +369,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
-      <br>
+    </div>
+    <div class="button-container">
       <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
       <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>

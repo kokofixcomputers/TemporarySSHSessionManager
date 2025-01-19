@@ -60,6 +60,12 @@
   .start-btn:hover {
     background-color: #218838 !important; /* Darker green */
   }
+  .start-btn:disabled {
+    background-color: #c0c0c0; /* Gray background for disabled state */
+    color: #7d7d7d; /* Lighter text color for visibility */
+    cursor: not-allowed; /* Change cursor to indicate non-interactivity */
+    opacity: 0.6; /* Slightly transparent to indicate disabled state */
+  }
 
   .stop-btn {
     padding: 10px 20px;
@@ -71,6 +77,12 @@
   }
   .stop-btn:hover {
     background-color: #c82333 !important; /* Darker red */
+  }
+  .stop-btn:disabled {
+    background-color: #c0c0c0; /* Gray background for disabled state */
+    color: #7d7d7d; /* Lighter text color for visibility */
+    cursor: not-allowed; /* Change cursor to indicate non-interactivity */
+    opacity: 0.6; /* Slightly transparent to indicate disabled state */
   }
 
 

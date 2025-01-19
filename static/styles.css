@@ -62,7 +62,7 @@
   }
   .start-btn:disabled {
     background-color: #c0c0c0; /* Gray background for disabled state */
-    color: #7d7d7d; /* Lighter text color for visibility */
+    color: #444444; /* Darker text color for visibility */
     cursor: not-allowed; /* Change cursor to indicate non-interactivity */
     opacity: 0.6; /* Slightly transparent to indicate disabled state */
   }
@@ -80,7 +80,7 @@
   }
   .stop-btn:disabled {
     background-color: #c0c0c0; /* Gray background for disabled state */
-    color: #7d7d7d; /* Lighter text color for visibility */
+    color: #444444; /* Lighter text color for visibility */
     cursor: not-allowed; /* Change cursor to indicate non-interactivity */
     opacity: 0.6; /* Slightly transparent to indicate disabled state */
   }
@@ -88,7 +88,7 @@
 
   button:disabled {
     background-color: #c0c0c0; /* Gray background for disabled state */
-    color: #7d7d7d; /* Lighter text color for visibility */
+    color: #444444; /* Lighter text color for visibility */
     cursor: not-allowed; /* Change cursor to indicate non-interactivity */
     opacity: 0.6; /* Slightly transparent to indicate disabled state */
   }

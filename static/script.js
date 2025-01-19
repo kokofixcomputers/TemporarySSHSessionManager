@@ -232,7 +232,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p><br>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      <button id="restart-btn-${container.name}" class="restart-btn" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
     <div class="button-container">
@@ -297,7 +297,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      <button id="restart-btn-${container.name}" class="restart-btn" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
     <div class="button-container">
@@ -367,7 +367,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
+      <button id="restart-btn-${container.name}" class="restart-btn" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
     </div>
     <div class="button-container">

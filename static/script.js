@@ -258,6 +258,20 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           restartContainer(containerId);
         });
       }
+      const startBtns = document.getElementsByClassName('start-btn');
+      for (let i = 0; i < startBtns.length; i++) {
+        startBtns[i].addEventListener('click', function () {
+          const containerId = this.id.split('-')[2];
+          startContainer(containerId);
+        });
+      }
+      const stopBtns = document.getElementsByClassName('stop-btn');
+      for (let i = 0; i < stopBtns.length; i++) {
+        stopBtns[i].addEventListener('click', function () {
+          const containerId = this.id.split('-')[2];
+          stopContainer(containerId);
+        });
+      }
     } else {
       containersDiv.innerHTML = '<p>No containers assigned.</p>';
     }
@@ -307,6 +321,20 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
             restartBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               restartContainer(containerId);
+            });
+          }
+          const startBtns = document.getElementsByClassName('start-btn');
+          for (let i = 0; i < startBtns.length; i++) {
+            startBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              startContainer(containerId);
+            });
+          }
+          const stopBtns = document.getElementsByClassName('stop-btn');
+          for (let i = 0; i < stopBtns.length; i++) {
+            stopBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              stopContainer(containerId);
             });
           }
         } else {

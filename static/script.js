@@ -356,7 +356,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           let html = '<ul class="container-list">';
           data.forEach(container => {
             html += `
-              <li>
+  <li>
     <h3>Session Details:</h3>
     <p><strong>Name:</strong> ${container.name}</p>
     <p><strong>Username:</strong> ${container.username}</p>
@@ -368,10 +368,11 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
       <br>
-      <button id="start-btn-${container.name}" class="start-btn">Start</button>
-      <button id="stop-btn-${container.name}" class="stop-btn">Stop</button>
+      <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
   </li>`;
+
           });
           html += '</ul>';
           containersDiv.innerHTML = html;

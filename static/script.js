@@ -442,67 +442,72 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
     });
   }
 
-  function restartContainer(containerId) {
-    if (confirm('Are you sure you want to restart this container?')) {
-      openModal();
-      fetch(`/container/restart?id=${containerId}`, { method: 'POST' })
-        .then(response => {
-          closeModal();
-          if (response.ok) {
-            refreshContainers();
-          } else {
-            console.error('Error restarting container:', response.statusText);
-            alert('Error restarting container. Please try again.');
-          }
-        })
-        .catch(error => {
-          closeModal();
-          console.error('Error restarting container:', error);
-          alert('Error restarting container. Please try again. Check console logs for more details.');
-        });
-    }
-  }
+function restartContainer(containerId) {
+  confirmModal('Are you sure you want to restart this container?').then((confirmed) => {
+      if (confirmed) {
+          openModal();
+          fetch(`/container/restart?id=${containerId}`, { method: 'POST' })
+              .then(response => {
+                  closeModal();
+                  if (response.ok) {
+                      refreshContainers();
+                  } else {
+                      console.error('Error restarting container:', response.statusText);
+                      alert('Error restarting container. Please try again.');
+                  }
+              })
+              .catch(error => {
+                  closeModal();
+                  console.error('Error restarting container:', error);
+                  alert('Error restarting container. Please try again. Check console logs for more details.');
+              });
+      }
+  });
+}
 
-  function startContainer(containerId) {
-    if (confirm('Are you sure you want to start this container?')) {
-      openModalStart();
-      fetch(`/container/start?id=${containerId}`, { method: 'POST' })
-        .then(response => {
-          closeModalStart();
-          if (response.ok) {
-            refreshContainers();
-          } else {
-            console.error('Error restarting container:', response.statusText);
-            alert('Error restarting container. Please try again.');
-          }
-        })
-        .catch(error => {
-          closeModalStart();
-          console.error('Error restarting container:', error);
-          alert('Error restarting container. Please try again. Check console logs for more details.');
-        });
-    }
-  }
-
+function startContainer(containerId) {
+  confirmModal('Are you sure you want to start this container?').then((confirmed) => {
+      if (confirmed) {
+          openModalStart();
+          fetch(`/container/start?id=${containerId}`, { method: 'POST' })
+              .then(response => {
+                  closeModalStart();
+                  if (response.ok) {
+                      refreshContainers();
+                  } else {
+                      console.error('Error starting container:', response.statusText);
+                      alert('Error starting container. Please try again.');
+                  }
+              })
+              .catch(error => {
+                  closeModalStart();
+                  console.error('Error starting container:', error);
+                  alert('Error starting container. Please try again. Check console logs for more details.');
+              });
+      }
+  });
+}
   function stopContainer(containerId) {
-    if (confirm('Are you sure you want to stop this container?')) {
-      openModalStop();
-      fetch(`/container/stop?id=${containerId}`, { method: 'POST' })
-        .then(response => {
-          closeModalStop();
-          if (response.ok) {
-            refreshContainers();
-          } else {
-            console.error('Error restarting container:', response.statusText);
-            alert('Error restarting container. Please try again.');
-          }
-        })
-        .catch(error => {
-          closeModalStop();
-          console.error('Error restarting container:', error);
-          alert('Error restarting container. Please try again. Check console logs for more details.');
-        });
-    }
+    confirmModal('Are you sure you want to stop this container?').then((confirmed) => {
+      if (confirmed) {
+        openModalStop();
+        fetch(`/container/stop?id=${containerId}`, { method: 'POST' })
+          .then(response => {
+            closeModalStop();
+            if (response.ok) {
+              refreshContainers();
+            } else {
+              console.error('Error restarting container:', response.statusText);
+              alert('Error restarting container. Please try again.');
+            }
+          })
+          .catch(error => {
+            closeModalStop();
+            console.error('Error restarting container:', error);
+            alert('Error restarting container. Please try again. Check console logs for more details.');
+          });
+      }
+    });
   }
 document.getElementById('logoutButton').addEventListener('click', function () {
 

@@ -53,8 +53,11 @@ def create_container(web_dashboard_host, port, outsider_port):
             detach=True, # REQUIRED for running in the background
             environment=environment_vars,
             network="stm",
+            user=1000,
+            mem_limit="612m",
             hostname=f"{username}@stm",
-            ports={'2222/tcp': port, '80': outsider_port}  # Add ports mapping
+            ports={'2222/tcp': port, '80': outsider_port},  # Add ports mapping
+            cpu_count=1
         )
     except:
         return None, None, None, None, None

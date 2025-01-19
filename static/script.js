@@ -82,80 +82,47 @@ function closeModalStop() {
 
 // Wait for DOM content to load
 document.addEventListener("DOMContentLoaded", function() {
+    // Get all modals and their close buttons
     modal = document.getElementById("myModal");
+    modal_start = document.getElementById("myModalStart");
+    modal_stop = document.getElementById("myModalStop");
+    modal_create = document.getElementById("myModalCreate");
+    modal_delete = document.getElementById("myModalDelete");
+    modal_connection = document.getElementById("myModalConnection");
+
+    // Get all close buttons
     span = document.getElementsByClassName("close")[0];
+    span_start = document.getElementsByClassName("close")[0];
+    span_stop = document.getElementsByClassName("close")[0];
+    span_create = document.getElementsByClassName("close")[0];
+    span_delete = document.getElementsByClassName("close")[0];
+    span_connection = document.getElementsByClassName("close")[0];
 
-    // Close the modal when the close button is clicked
+    // Set up close button clicks
     span.onclick = closeModal;
+    span_start.onclick = closeModalStart;
+    span_stop.onclick = closeModalStop;
+    span_create.onclick = closeModalCreate;
+    span_delete.onclick = closeModalDelete;
+    span_connection.onclick = closeModalConnection;
 
-    // Close the modal when clicking outside of it
+    // Handle clicking outside of modals
     window.onclick = function(event) {
         if (event.target == modal) {
             closeModal();
-        }
-    }
-});
-document.addEventListener("DOMContentLoaded", function() {
-    modal_start = document.getElementById("myModalStart");
-    span_start = document.getElementsByClassName("close")[0];
-    // Close the modal when the close button is clicked
-    span_start.onclick = closeModalStart;
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == modal_start) {
+        } else if (event.target == modal_start) {
             closeModalStart();
-        }
-    }
-});
-document.addEventListener("DOMContentLoaded", function() {
-    modal_stop = document.getElementById("myModalStop");
-    span_stop = document.getElementsByClassName("close")[0];
-    // Close the modal when the close button is clicked
-    span_stop.onclick = closeModalStop;
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == modal_stop) {
+        } else if (event.target == modal_stop) {
             closeModalStop();
-        }
-    }
-});
-document.addEventListener("DOMContentLoaded", function() {
-    modal_create = document.getElementById("myModalCreate");
-    span_create = document.getElementsByClassName("close")[0];
-    // Close the modal when the close button is clicked
-    span_create.onclick = closeModalCreate;
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == modal_create) {
+        } else if (event.target == modal_create) {
             closeModalCreate();
-        }
-    }
-});
-document.addEventListener("DOMContentLoaded", function() {
-    modal_delete = document.getElementById("myModalDelete");
-    span_delete = document.getElementsByClassName("close")[0];
-    // Close the modal when the close button is clicked
-    span_delete.onclick = closeModalDelete;
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == modal_delete) {
+        } else if (event.target == modal_delete) {
             closeModalDelete();
-        }
-    }
-});
-document.addEventListener("DOMContentLoaded", function() {
-    modal_connection = document.getElementById("myModalConnection");
-    span_connection = document.getElementsByClassName("close")[0];
-    // Close the modal when the close button is clicked
-    span_connection.onclick = closeModalConnection;
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == modal_connection) {
+        } else if (event.target == modal_connection) {
             closeModalConnection();
         }
     }
 });
-
 
 
 document.getElementById('generateSessionBtn').addEventListener('click', function () {

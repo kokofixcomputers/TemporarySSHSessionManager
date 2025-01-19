@@ -235,8 +235,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
       <br>
-      <button id="start-btn-${container.name}" class="start-btn">Start</button>
-      <button id="stop-btn-${container.name}" class="stop-btn">Stop</button>
+      <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
   </li>`;
       });
@@ -299,8 +299,8 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
       <br>
-      <button id="start-btn-${container.name}" class="start-btn">Start</button>
-      <button id="stop-btn-${container.name}" class="stop-btn">Stop</button>
+      <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
   </li>`;
             const containernametodelete = container.name;

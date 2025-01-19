@@ -282,6 +282,7 @@ def start_container():
         handler.start_container(container_name)
         conn.commit()
         conn.close()
+    return jsonify({"message": "Container started."})
 
 @app.route('/auth')
 def auth():

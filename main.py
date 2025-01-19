@@ -338,6 +338,7 @@ import websockets
 import requests
 import subprocess
 import os
+import time
 import json
 import psutil
 
@@ -365,16 +366,18 @@ async def report_status(websocket):
 
 async def listen_for_commands():
     uri = scheme + "://" + host + ":" + str(port)
-    try:
-        async with websockets.connect(uri) as websocket:
-            while True:
-                command = await websocket.recv()
-                if command == '{"message": "request_report_status"}':
-                    await report_status(websocket)
-                else:
-                    print(f"{command}")
-    except websockets.exceptions.ConnectionClosedError:
-                print("Agent disconnected. Reconnecting...")
+    while True:
+        try:
+            async with websockets.connect(uri) as websocket:
+                while True:
+                    command = await websocket.recv()
+                    if command == '{"message": "request_report_status"}':
+                        await report_status(websocket)
+                    else:
+                        print(f"{command}")
+        except:
+                    print("Agent disconnected. Reconnecting in 20 seconds...")
+                    time.sleep(20)
 
 if __name__ == "__main__":
     response = requests.get(schemed_host + "agent/handshake").json()

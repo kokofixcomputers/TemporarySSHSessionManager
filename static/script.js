@@ -461,10 +461,10 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
 
   function startContainer(containerId) {
     if (confirm('Are you sure you want to start this container?')) {
-      openModal();
+      openModalStart();
       fetch(`/container/start?id=${containerId}`, { method: 'POST' })
         .then(response => {
-          closeModal();
+          closeModalStart();
           if (response.ok) {
             refreshContainers();
           } else {
@@ -473,7 +473,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           }
         })
         .catch(error => {
-          closeModal();
+          closeModalStart();
           console.error('Error restarting container:', error);
           alert('Error restarting container. Please try again. Check console logs for more details.');
         });
@@ -482,10 +482,10 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
 
   function stopContainer(containerId) {
     if (confirm('Are you sure you want to stop this container?')) {
-      openModal();
+      openModalStop();
       fetch(`/container/stop?id=${containerId}`, { method: 'POST' })
         .then(response => {
-          closeModal();
+          closeModalStop();
           if (response.ok) {
             refreshContainers();
           } else {
@@ -494,7 +494,7 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           }
         })
         .catch(error => {
-          closeModal();
+          closeModalStop();
           console.error('Error restarting container:', error);
           alert('Error restarting container. Please try again. Check console logs for more details.');
         });

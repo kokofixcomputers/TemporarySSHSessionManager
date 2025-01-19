@@ -239,6 +239,49 @@ def restart_container():
     else:
         conn.close()
         return jsonify({"error": "No container ID provided."}), 400
+    
+@app.route('/container/stop', methods=['POST'])
+def stop_container():
+    user = session.get('username')
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
+    if not is_authorized(session['username']):
+        return jsonify({"error": "You are not authorized to stop containers."}), 403
+
+    # Checking if the user has access to the container using the username
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    perms_check = c.execute("SELECT user FROM containers WHERE name=? AND user=?", (request.args.get('id'),user)).fetchone()
+    if perms_check is None:
+        return jsonify({"error": "You are not authorized to stop this container or this container never existed."}), 403
+
+    container_name = request.args.get('id')
+    if container_name:
+        c.execute("UPDATE containers SET active = ? WHERE name = ?", (False, request.args.get('id'))).fetchone()
+        handler.stop_container(container_name)
+        conn.commit()
+        conn.close()
+    return jsonify({"message": "Container stopped."})
+
+@app.route('/container/start', methods=['POST'])
+def start_container():
+    user = session.get('username')
+    if not authenticated(session):
+        return jsonify({"error": "You are not logged in."}), 401
+    if not is_authorized(session['username']):
+        return jsonify({"error": "You are not authorized to start containers."}), 403
+    # Checking if the user has access to the container using the username
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    perms_check = c.execute("SELECT user FROM containers WHERE name=? AND user=?", (request.args.get('id'),user)).fetchone()
+    if perms_check is None:
+        return jsonify({"error": "You are not authorized to start this container or this container never existed."}), 403
+    container_name = request.args.get('id')
+    if container_name:
+        c.execute("UPDATE containers SET active = ? WHERE name = ?", (True, request.args.get('id'))).fetchone()
+        handler.start_container(container_name)
+        conn.commit()
+        conn.close()
 
 @app.route('/auth')
 def auth():

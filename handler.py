@@ -1,3 +1,6 @@
+# Handler.py
+# For handling docker operation.
+
 import docker
 import random
 import string
@@ -29,6 +32,28 @@ word_list = [
     "cuddly", "dreamy", "energetic", "frosty", "giddy",
     "hilarious", "jazzy", "kooky", "luminous", "mirthful"
 ]  # Expanded list of words for username generation
+
+def is_container_running(container_name: str):
+    """Verify the status of a container by its name.
+
+    :param container_name: The name of the container.
+    :return: True if running, False if stopped, None if not found.
+    """
+    RUNNING = "running"
+    
+    # Connect to Docker
+    docker_client = docker.from_env()
+
+    try:
+        # Get the container by name
+        container = docker_client.containers.get(container_name)
+    except docker.errors.NotFound as exc:
+        print(f"Check container name!\n{exc.explanation}")
+        return None
+
+    # Check the status of the container
+    container_state = container.attrs["State"]
+    return container_state["Status"] == RUNNING
 
 
 def create_container(web_dashboard_host, port, outsider_port):
@@ -70,6 +95,24 @@ def restart_container(name):
         client = docker.from_env()
         container = client.containers.get(name)
         container.restart()
+    except:
+        return None
+    return True
+
+def stop_container(name):
+    try:
+        client = docker.from_env()
+        container = client.containers.get(name)
+        container.stop()
+    except:
+        return None
+    return True
+
+def start_container(name):
+    try:
+        client = docker.from_env()
+        container = client.containers.get(name)
+        container.start()
     except:
         return None
     return True

@@ -7,6 +7,10 @@ var modal_delete;
 var span_delete;
 var modal_connection;
 var span_connection;
+var modal_start;
+var span_start;
+var modal_stop;
+var span_stop;
 var tooltipContainer;
 var tooltipContent;
 
@@ -25,6 +29,16 @@ function openModalDelete() {
     if (modal_delete) {
         console.log("Opening modal_delete");
         modal_delete.style.display = "block";
+    }
+}
+function openModalStart() {
+    if (modal_start) {
+        modal_start.style.display = "block";
+    }
+}
+function openModalStop() {
+    if (modal_stop) {
+        modal_stop.style.display = "block";
     }
 }
 function openModalConnection() {
@@ -55,6 +69,16 @@ function closeModalConnection() {
         modal_connection.style.display = "none";
     }
 }
+function closeModalStart() {
+    if (modal_start) {
+        modal_start.style.display = "none";
+    }
+}
+function closeModalStop() {
+    if (modal_stop) {
+        modal_stop.style.display = "none";
+    }
+}
 
 // Wait for DOM content to load
 document.addEventListener("DOMContentLoaded", function() {
@@ -68,6 +92,30 @@ document.addEventListener("DOMContentLoaded", function() {
     window.onclick = function(event) {
         if (event.target == modal) {
             closeModal();
+        }
+    }
+});
+document.addEventListener("DOMContentLoaded", function() {
+    modal_start = document.getElementById("myModalStart");
+    span_start = document.getElementsByClassName("close")[0];
+    // Close the modal when the close button is clicked
+    span_start.onclick = closeModalStart;
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == modal_start) {
+            closeModalStart();
+        }
+    }
+});
+document.addEventListener("DOMContentLoaded", function() {
+    modal_stop = document.getElementById("myModalStop");
+    span_stop = document.getElementsByClassName("close")[0];
+    // Close the modal when the close button is clicked
+    span_stop.onclick = closeModalStop;
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == modal_stop) {
+            closeModalStop();
         }
     }
 });
@@ -186,6 +234,9 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+      <br>
+      <button id="start-btn-${container.name}" class="start-btn">Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn">Stop</button>
     </div>
   </li>`;
       });
@@ -233,6 +284,9 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+      <br>
+      <button id="start-btn-${container.name}" class="start-btn">Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn">Stop</button>
     </div>
   </li>`;
             const containernametodelete = container.name;
@@ -285,6 +339,9 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
       <button id="restart-btn-${container.name}" class="restart-btn">Restart</button>
       <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+      <br>
+      <button id="start-btn-${container.name}" class="start-btn">Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn">Stop</button>
     </div>
   </li>`;
           });
@@ -304,6 +361,20 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
             restartBtns[i].addEventListener('click', function () {
               const containerId = this.id.split('-')[2];
               restartContainer(containerId);
+            });
+          }
+          const startBtns = document.getElementsByClassName('start-btn');
+          for (let i = 0; i < startBtns.length; i++) {
+            startBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              startContainer(containerId);
+            });
+          }
+          const stopBtns = document.getElementsByClassName('stop-btn');
+          for (let i = 0; i < stopBtns.length; i++) {
+            stopBtns[i].addEventListener('click', function () {
+              const containerId = this.id.split('-')[2];
+              stopContainer(containerId);
             });
           }
         } else {
@@ -359,6 +430,48 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
         });
     }
   }
+
+  function startContainer(containerId) {
+    if (confirm('Are you sure you want to start this container?')) {
+      openModal();
+      fetch(`/container/start?id=${containerId}`, { method: 'POST' })
+        .then(response => {
+          closeModal();
+          if (response.ok) {
+            refreshContainers();
+          } else {
+            console.error('Error restarting container:', response.statusText);
+            alert('Error restarting container. Please try again.');
+          }
+        })
+        .catch(error => {
+          closeModal();
+          console.error('Error restarting container:', error);
+          alert('Error restarting container. Please try again. Check console logs for more details.');
+        });
+    }
+  }
+
+  function stopContainer(containerId) {
+    if (confirm('Are you sure you want to stop this container?')) {
+      openModal();
+      fetch(`/container/stop?id=${containerId}`, { method: 'POST' })
+        .then(response => {
+          closeModal();
+          if (response.ok) {
+            refreshContainers();
+          } else {
+            console.error('Error restarting container:', response.statusText);
+            alert('Error restarting container. Please try again.');
+          }
+        })
+        .catch(error => {
+          closeModal();
+          console.error('Error restarting container:', error);
+          alert('Error restarting container. Please try again. Check console logs for more details.');
+        });
+    }
+  }
 document.getElementById('logoutButton').addEventListener('click', function () {
 
     // Redirect users to the logout page
@@ -392,7 +505,7 @@ function openConnectionPopup(containerId) {
                 <strong>Active?</strong> ${data.active ? 'Yes' : 'No'}<br>
                 <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
 
-                <br>
+                <br><br>
                 This may eventually be a issue with connecting to the container because it keeps adding to your known_hosts file. 
                 To avoid that, you can run <code>alias sshnohost='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'</code> and then use sshnohost instead of ssh. This way, it won't add to your known_hosts file.
 

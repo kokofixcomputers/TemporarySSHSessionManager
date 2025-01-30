@@ -40,7 +40,7 @@ if [ ! -f "$BASH_PROFILE" ]; then
     echo 'fi' >> "$BASH_PROFILE"
     echo "Setting up Coloured environment"
     echo "alias ls='ls --color=auto'" >> "$BASH_PROFILE"
-    echo "export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'" >> "$BASH_PROFILE"
+    echo "export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> "$BASH_PROFILE"
 else
     echo "$BASH_PROFILE already exists."
 fi

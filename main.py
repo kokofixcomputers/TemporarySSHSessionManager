@@ -253,9 +253,9 @@ def get_user_containers_api():
             "username": container[2],
             "password": container[3],
             "port": container[5],
-            "exposed_port": container[7],
+            "exposed_port": container[6],
             "hostname": base_url_no_scheme,
-            "active": container[6]
+            "active": container[7]
         }
         container_list.append(container_details)
     return jsonify(container_list)

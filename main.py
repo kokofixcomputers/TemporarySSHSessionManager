@@ -134,6 +134,8 @@ def sync_database_with_docker_containers_state():
             else:
                 cursor.execute("UPDATE containers SET active = ? WHERE name = ?", (False, container[1]))
                 conn.commit()
+                
+sync_database_with_docker_containers_state()
 
 def create_database():
     debug_print("Creating database if not exists...", colors.fg.green)

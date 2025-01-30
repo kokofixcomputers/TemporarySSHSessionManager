@@ -218,7 +218,7 @@ def validate_api_key(key):
         return True
     
 @app.route('/api/get_user_containers', methods=['GET'])
-def get_user_containers():
+def get_user_containers_api():
     # Get the API key from the request headers
     api_key = request.headers.get('Authorization')
     # Validate the API key

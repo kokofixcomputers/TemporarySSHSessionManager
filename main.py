@@ -201,7 +201,7 @@ def generate_api_key():
 @app.route('/apikey/dashboard')
 def api_key_dashboard():
     if authenticated(session):
-        return render_template('api_key_dashboard.html', username=session['username'])
+        return render_template('api_key.html', username=session['username'])
     else:
         return redirect(url_for('auth'))
     

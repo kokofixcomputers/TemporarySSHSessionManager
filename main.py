@@ -16,12 +16,28 @@ import random
 
 colors = printedcolors.Color
 
-network_setup.setup_network()
+def debug_print(message, color=""):
+    if color == "":
+        reset = ""
+    else:
+        reset = colors.reset
+    if DEBUG:
+        print(color + message + reset)
+        
+print(colors.fg.cyan + "Temporary SSH Session Manager" + colors.reset)
+print("")
+
+print(colors.fg.lightblue + "Testing Docker Connection..." + colors.reset)
+if not handler.test_docker_connection():
+    print(colors.fg.red + "Docker is not running. Please start Docker and try again." + colors.reset)
+    exit(1) # Non-zero exit code indicates an error
+else:
+    print(colors.fg.green + "Docker is running. Proceeding with the application." + colors.reset)
+
+network_setup.setup_network(debug_print=debug_print)
 
 config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
 detect_already_configured = configurationlib.Instance("DELETE_THIS_FILE_TO_RESET_CONFIGURATION.py", format=configurationlib.Format.PYTHON)
-
-print(colors.fg.cyan + "Temporary SSH Session Manager" + colors.reset)
 
 try:
     CONFIGURED = detect_already_configured.get()['CONFIGURED']
@@ -42,14 +58,6 @@ except:
     print(colors.fg.red + "Error: Configuration missing. Things may go very wrong." + colors.reset)
 if DEBUG:
     print(colors.fg.yellow + "Debug mode enabled." + colors.reset)
-    
-def debug_print(message, color=""):
-    if color == "":
-        reset = ""
-    else:
-        reset = colors.reset
-    if DEBUG:
-        print(color + message + reset)
 
 debug_print("Loading configuration...", colors.fg.green)
 
@@ -93,6 +101,39 @@ def authenticated(session):
         conn.close()
         return session is not None
     return True
+
+def sync_database_with_docker_containers_state():
+    debug_print("Syncing database with Docker containers state...", colors.fg.green)
+    conn = sqlite3.connect('containers.db')
+    cursor = conn.cursor()
+    # Iterate over all containers and check if they are: (running, stopped, exists).
+    containers = cursor.execute("SELECT * FROM containers")
+    # Check if container exist.
+    for container in containers:
+        # Check if container exists
+        exist = handler.check_container_existence(container[1])
+        if exist:
+            handler.check_container_existence(container[1])
+        else:
+            # Container does not exist
+            debug_print(f"Container {container[1]} does not exist. Deleting...", colors.fg.red)
+            cursor.execute("DELETE FROM containers WHERE name=?", (container[1],))
+            conn.commit()
+            continue
+    # Refresh containers
+    containers = cursor.execute("SELECT * FROM containers")
+    # Check container's state (running, stopped).
+    for container in containers:
+        state = handler.fetch_container_state(container[1])
+        bool_state = True if state == "running" else False
+        if container[6] != bool_state:
+            debug_print(f"Container {container[1]} state changed from {container[6]} to {bool_state}.", colors.fg.green)
+            if state == True:
+                cursor.execute("UPDATE containers SET active = ? WHERE name = ?", (True, container[1]))
+                conn.commit()
+            else:
+                cursor.execute("UPDATE containers SET active = ? WHERE name = ?", (False, container[1]))
+                conn.commit()
 
 def create_database():
     debug_print("Creating database if not exists...", colors.fg.green)

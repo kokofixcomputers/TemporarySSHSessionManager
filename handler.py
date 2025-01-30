@@ -55,6 +55,34 @@ def is_container_running(container_name: str):
     container_state = container.attrs["State"]
     return container_state["Status"] == RUNNING
 
+def check_container_existence(container_name):
+    """Check if a container exists."""
+    try:
+        client = docker.from_env()
+        client.containers.get(container_name)
+    except docker.errors.NotFound:
+        return False
+    return True
+
+def fetch_container_state(container_name):
+    """Fetch the state of the container. stopped or running Returns True if running, False if stopped, None if not found."""
+    try:
+        client = docker.from_env()
+        container = client.containers.get(container_name)
+        container_state = container.attrs["State"]
+        return container_state["Status"] == "running"
+    except docker.errors.NotFound:
+        return None
+    
+def test_docker_connection():
+    try:
+        client = docker.from_env()
+        client.containers.list()
+        return True
+    except:
+        return False
+    
+
 
 def create_container(web_dashboard_host, port, outsider_port):
     username = generate_username(word_list)
@@ -95,6 +123,8 @@ def restart_container(name):
         client = docker.from_env()
         container = client.containers.get(name)
         container.restart()
+    except docker.errors.NotFound:
+        return True # No such container. May have been removed already. Return True to update database.
     except:
         return None
     return True
@@ -104,6 +134,8 @@ def stop_container(name):
         client = docker.from_env()
         container = client.containers.get(name)
         container.stop()
+    except docker.errors.NotFound:
+        return True # No such container. May have been removed already. Return True to update database.
     except:
         return None
     return True
@@ -113,6 +145,8 @@ def start_container(name):
         client = docker.from_env()
         container = client.containers.get(name)
         container.start()
+    except docker.errors.NotFound:
+        return True # No such container. May have been removed already. Return True to update database.
     except:
         return None
     return True
@@ -122,6 +156,8 @@ def delete_container(name):
         client = docker.from_env()
         container = client.containers.get(name)
         container.remove(force=True)
+    except docker.errors.NotFound:
+        return True # No such container. May have been removed already. Return True to update database.
     except:
         return None
     return True

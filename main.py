@@ -34,7 +34,7 @@ if not handler.test_docker_connection():
 else:
     print(colors.fg.green + "Docker is running. Proceeding with the application." + colors.reset)
 
-network_setup.setup_network(debug_print=debug_print)
+network_setup.setup_network()
 
 config = configurationlib.Instance("config.json", format=configurationlib.Format.JSON)
 detect_already_configured = configurationlib.Instance("DELETE_THIS_FILE_TO_RESET_CONFIGURATION.py", format=configurationlib.Format.PYTHON)

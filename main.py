@@ -221,20 +221,44 @@ def validate_api_key(key):
 def get_user_containers_api():
     # Get the API key from the request headers
     api_key = request.headers.get('Authorization')
+    
     # Validate the API key
     if not validate_api_key(api_key):
         return jsonify({"error": "Invalid API key"}), 401
+    
+    # Assuming request.url_root is defined
+    url = request.url_root
+    parsed_url = urlparse(url)
+
+    # Constructing the base URL without scheme and port
+    base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
+    
     # Get the username from the API key
     conn = sqlite3.connect('containers.db')
     c = conn.cursor()
+    
     c.execute('SELECT user FROM api_key WHERE api_key=?', (api_key,))
-    username = c.fetchone()[0]
+    result = c.fetchone()
+    if result is None:
+        return jsonify({"error": "Invalid API key"}), 401
+    username = result[0]
     # Get the user's containers
     c.execute('SELECT * FROM containers WHERE user=?', (username,))
     containers = c.fetchall()
     conn.close()
-    # Return the containers as JSON
-    return jsonify(containers)
+    container_list = []
+    for container in containers:
+        container_details = {
+            "name": container[1],
+            "username": container[2],
+            "password": container[3],
+            "port": container[5],
+            "exposed_port": container[7],
+            "hostname": base_url_no_scheme,
+            "active": container[6]
+        }
+        container_list.append(container_details)
+    return jsonify(container_list)
     
     
 @app.route('/install')

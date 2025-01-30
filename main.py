@@ -10,6 +10,7 @@ from waitress import serve
 import configurationlib
 import time
 import configuration_manager
+import secrets
 import printedcolors
 import network_setup
 import random
@@ -159,6 +160,10 @@ def create_database():
                user TEXT,
                session TEXT)
                ''')
+    c.execute('''CREATE TABLE IF NOT EXISTS api_key (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                api_key TEXT,
+                user TEXT)''')
     conn.commit()
     conn.close()
     
@@ -171,6 +176,66 @@ def home():
         return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']), admin=is_admin(session['username']))
     else:
         return redirect(url_for('auth'))
+    
+@app.route('/apikey/generate', methods=['POST'])
+def generate_api_key():
+    if authenticated(session):
+        conn = sqlite3.connect('containers.db')
+        c = conn.cursor()
+        # Make sure the user has not already generated an API key
+        c.execute('SELECT * FROM api_key WHERE user=?', (session['username'],))
+        if c.fetchone() is not None:
+            # Get the user's API Key
+            api = c.execute('SELECT api_key FROM api_key WHERE user=?', (session['username'],)).fetchone()
+            return f"<p>{api}</p>"
+        else:
+            # Generate a new API key
+            new_api_key = "stm_" + str(secrets.token_hex(32))
+            c.execute('INSERT INTO api_key (api_key, user) VALUES (?, ?)', (new_api_key, session['username']))
+        conn.commit()
+        conn.close()
+        return "<p>" + str(new_api_key) + "</p>"
+    else:
+        return "<p>You are not authorized to access this page.</p>"
+    
+@app.route('/apikey/dashboard')
+def api_key_dashboard():
+    if authenticated(session):
+        return render_template('api_key_dashboard.html', username=session['username'])
+    else:
+        return redirect(url_for('auth'))
+    
+def validate_api_key(key):
+    # Check if the API key is valid
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM api_key WHERE api_key=?', (key,))
+    result = c.fetchone()
+    conn.close()
+    if result is None:
+        return False
+    else:
+        return True
+    
+@app.route('/api/get_user_containers', methods=['GET'])
+def get_user_containers():
+    # Get the API key from the request headers
+    api_key = request.headers.get('Authorization')
+    # Validate the API key
+    if not validate_api_key(api_key):
+        return jsonify({"error": "Invalid API key"}), 401
+    # Get the username from the API key
+    conn = sqlite3.connect('containers.db')
+    c = conn.cursor()
+    c.execute('SELECT user FROM api_key WHERE api_key=?', (api_key,))
+    username = c.fetchone()[0]
+    # Get the user's containers
+    c.execute('SELECT * FROM containers WHERE user=?', (username,))
+    containers = c.fetchall()
+    conn.close()
+    # Return the containers as JSON
+    return jsonify(containers)
+    
     
 @app.route('/install')
 def install():

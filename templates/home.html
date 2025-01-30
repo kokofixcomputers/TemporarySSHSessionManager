@@ -13,7 +13,9 @@
       <h1>SSH Temporary Session Generator</h1>
       <p>Logged in as {{ username }}</p>
       {% if admin %}
-      <a href="/admin">Admin Panel</a>
+      <br>
+      <a href="/admin">Admin Panel</a><br>
+      <a href="/apikey/dashboard">API Key</a><br>
       {% endif %}
       <button id="logoutButton" class="redbutton">Logout</button>
       {% if authorized %}

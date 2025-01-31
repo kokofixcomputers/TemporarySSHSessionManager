@@ -31,6 +31,7 @@ if getattr(args, 'credential_reset'):
 containers = requests.get(host + "/api/get_user_containers", headers={"Authorization": api_key})
 if containers.status_code == 404:
     print("A Incorrect API URL Has been provided. Please check your url. Make sure it includes https:// or http:// and the port number.")
+    exit(1)
 containers = containers.json()
 
 

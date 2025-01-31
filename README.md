@@ -17,6 +17,7 @@ Sometimes you have apps or services you need to test. Or just commands that you 
 - Internet Access (Allow containers to access the internet)
 - Exposed Port (Randomly choose a port from a range to allow access to containers from outside network.)
 - Nice UI
+- Custom Connection Client
 
 ## Installation
 
@@ -57,3 +58,12 @@ Here is all the configuration keys and their description:
 | `AGENT_PORT` | The port the agent websocket will run on.| `8765` |
 | `STARTING_PORT_FOR_CONTAINERS` | Starting port of the randomly generated port for the ssh session | `2280` |
 | `ENDING_PORT_FOR_CONTAINERS` | Ending port of the randomly generated port for the ssh session | `2599` |
+
+## Using the Custom Client
+
+Run:
+```bash
+python customclient.py
+```
+
+Then enter your API Key and Base URL. (with http:// or https://)

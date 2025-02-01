@@ -315,3 +315,21 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  select {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+  }
+
+  select:hover {
+      border-color: #888;
+  }
+
+  select:focus {
+      outline: none;
+      border-color: #007BFF;
+  }

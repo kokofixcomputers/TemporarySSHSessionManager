@@ -126,51 +126,62 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 document.getElementById('generateSessionBtn').addEventListener('click', function () {
-    const generateSessionBtn = document.getElementById('generateSessionBtn');
+  const generateSessionBtn = document.getElementById('generateSessionBtn');
 
-    // Check if the element is disabled
-    if (generateSessionBtn.disabled) {
-        return; // Exit the function if the element is disabled
-    }
-    openModalCreate();
-    const xhr = new XMLHttpRequest();
-    document.getElementById('result').innerHTML = `
-          <p>Generating session... Do not click the above button again. This might take a few minutes.</p>
-      `;
-    document.getElementById("generateSessionBtn").disabled = true;
-    xhr.open('POST', '/create_container', true);
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+  // Check if the element is disabled
+  if (generateSessionBtn.disabled) {
+      return; // Exit the function if the element is disabled
+  }
+
+  openModalCreate();
+  const xhr = new XMLHttpRequest();
   
-    xhr.onload = function () {
+  // Display a message to inform the user
+  document.getElementById('result').innerHTML = `
+      <p>Generating session... Do not click the above button again. This might take a few minutes.</p>
+  `;
+  
+  // Disable the button to prevent multiple clicks
+  generateSessionBtn.disabled = true;
+
+  // Get the selected value from the distro-select element
+  const distroValue = document.getElementById('distro-select').value;
+
+  xhr.open('POST', '/create_container', true);
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+  xhr.onload = function () {
       closeModalCreate();
       if (xhr.status >= 200 && xhr.status < 300) {
-        const response = JSON.parse(xhr.responseText);
-        document.getElementById("generateSessionBtn").disabled = false;
-        displayResult(response);
-        refreshContainers();
+          const response = JSON.parse(xhr.responseText);
+          generateSessionBtn.disabled = false;
+          displayResult(response);
+          refreshContainers();
       } else {
-        const response = JSON.parse(xhr.responseText);
-        // Find out the error code and display the corresponding error message
-        if (response.code === 1002) { // MAX_ERROR
-          alert('You have reached the maximum number of containers. Please delete one to create another.');
-        } else if (response.code === 2) { // UNKNOWN_ERROR
+          const response = JSON.parse(xhr.responseText);
+          // Handle different error codes
+          if (response.code === 1002) { // MAX_ERROR
+              alert('You have reached the maximum number of containers. Please delete one to create another.');
+          } else if (response.code === 2) { // UNKNOWN_ERROR
+              document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
+          } else { // UNKNOWN_ERROR
+              document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
+          }
+          console.error('Error:', xhr.responseText);
           document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
-        } else { // UNKNOWN_ERROR
-          document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
-        }
-        console.error('Error:', xhr.responseText);
-        document.getElementById('result').innerHTML = '<p>Error generating session. Please try again.</p>';
       }
-    };
-  
-    xhr.onerror = function () {
+  };
+
+  xhr.onerror = function () {
       closeModalCreate();
       console.error('Request failed');
       document.getElementById('result').innerHTML = '<p>Request failed. Please check your connection.</p>';
-    };
-  
-    xhr.send(JSON.stringify({})); // Send an empty object or any required params
-  });
+  };
+
+  // Send an object with the selected distro value
+  xhr.send(JSON.stringify({ distro: distroValue })); // Send selected distro value
+});
+
   
   function displayResult(data) {
     document.getElementById('result').innerHTML = `

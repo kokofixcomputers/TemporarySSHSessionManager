@@ -5,6 +5,7 @@ import docker
 import random
 import string
 import time
+import distro_handler
 
 # Function to generate a random username from a list of words
 def generate_username(word_list, length=2):
@@ -84,7 +85,7 @@ def test_docker_connection():
     
 
 
-def create_container(web_dashboard_host, port, outsider_port):
+def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
     username = generate_username(word_list)
     password = generate_password()
 
@@ -96,13 +97,16 @@ def create_container(web_dashboard_host, port, outsider_port):
         "INSTALL_SCRIPT_URL": web_dashboard_host,
         "WELCOME_MESSAGE": "\033[36mWelcome to your temporary environment.\033[0m\nTemporary SSH Server made by kokofixcomputers\nGitHub: https://github.com/kokofixcomputers/TemporarySSHSessionManager.git \nLicensed Under the Mit License.\n\n\033[32mTo access sudo, run a command with sudo and enter the password shown in the dashboard when asked for password.\033[0m\n\n\n\033[1mBy Using the Container, You agree to the conditions below. \n1. You will REFRAIN from using anything illegal or unethical.\033[0m\n2. For and under any circumstances, You allow admins to connect and execute commands in your container.\n3. You agree that you allow the security and performance monitoring applications installed automaticlly to run.\n By using this container, You agree to the above notes. Please also refrain from using any confidential information in this enviroment.\n\nPlease Consider leaving a ⭐ Star on our repo!\n\033[0mHave fun!",
     }
+    
+    # Find image of distro
+    image = distro_handler.get_image(distro)
 
     # Create and run the container
     try:
         client = docker.from_env()
         time.sleep(1)
         container = client.containers.run(
-            "kokofixcomputers/docker-openssh-server-fork:latest",
+            image,
             detach=True, # REQUIRED for running in the background
             environment=environment_vars,
             network="stm",

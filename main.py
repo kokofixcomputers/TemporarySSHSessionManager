@@ -261,12 +261,21 @@ def get_user_containers_api():
     return jsonify(container_list)
     
     
-@app.route('/install')
-def install():
+@app.route('/install/alpine')
+def install_alpine():
     #if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
     #    return jsonify({"error": "Unauthorized"}), 401
     url = request.url_root
     template = env.get_template('install_script.sh.j2')
+    rendered_script = template.render(url=url) # Render the script.
+    return Response(rendered_script, mimetype='text/plain')
+
+@app.route('/install/ubuntu')
+def install_ubuntu():
+    #if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
+    #    return jsonify({"error": "Unauthorized"}), 401
+    url = request.url_root
+    template = env.get_template('install_script_ubuntu.sh.j2')
     rendered_script = template.render(url=url) # Render the script.
     return Response(rendered_script, mimetype='text/plain')
 
@@ -322,6 +331,8 @@ def create_container_route():
     # Assuming request.url_root is defined
     url = request.url_root
     parsed_url = urlparse(url)
+    data = request.get_json()  # Use this if sending JSON
+    distro = data.get('distro')  # Access the 'distro' key
     
     c.execute("SELECT user FROM containers WHERE user=?", (session['username'],))
 
@@ -334,10 +345,10 @@ def create_container_route():
         pass # No limit
     elif row_count >= config.get()['MAX_CONTAINERS_PER_USER']:
         return jsonify({"error": "You have reached the maximum number of containers per user.", "code": 1002}), 403
-
+    
     # Constructing the base URL without scheme and port
     base_url_no_scheme = parsed_url.hostname + parsed_url.path.rstrip('/')
-    name, username, password, port, exposed_port = handler.create_container(url + '''/install?token="stm_NDbBshvFzKZLlOuhY1OPcS"''', port=get_random_port(), outsider_port=get_random_outsider_port()) # TODO: Add non-static token.
+    name, username, password, port, exposed_port = handler.create_container(url + f'''/install/{distro}''', port=get_random_port(), outsider_port=get_random_outsider_port(), distro=distro) # TODO: Add non-static token.
     if name is not None:
         c.execute("INSERT INTO containers (name, username, password, user, port, dev_port, active) VALUES (?, ?, ?, ?, ?, ?, ?)", (name, username, password, session['username'], port, exposed_port, True))
         conn.commit()

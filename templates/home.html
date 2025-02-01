@@ -20,6 +20,10 @@
       <button id="logoutButton" class="redbutton">Logout</button>
       {% if authorized %}
         <p>You are authorized to generate SSH sessions.</p>
+        <select id="distro-select" name="distro">
+          <option value="alpine">Alpine</option>
+          <option value="ubuntu">Ubuntu</option>
+        </select>
         <button id="generateSessionBtn">Generate SSH Session</button>
       {% else %}
         <p>You are not authorized to generate SSH sessions.</p>

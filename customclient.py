@@ -3,7 +3,11 @@ import requests
 from InquirerPy import prompt
 from InquirerPy.base.control import Choice
 import os
+import printedcolors
 import argparse
+
+colors = printedcolors.Color
+fg = printedcolors.Color.fg
 
 api_key = keyring.get_password("stmclient", "api_key")
 host = keyring.get_password("stmclient", "host")
@@ -36,14 +40,18 @@ containers = containers.json()
 
 
 choices = [Choice(name=f"{container['name']} ({container['username']}@{container['hostname']})", value=container) for container in containers if container['active'] == 1]
-selected_container = prompt([
-    {
-        "type": "list",
-        "name": "selected_container",
-        "message": "Select a container:",
-        "choices": choices
-    }
-])["selected_container"]
+try:
+    selected_container = prompt([
+        {
+            "type": "fuzzy",
+            "name": "selected_container",
+            "message": "Select a container:",
+            "choices": choices
+        }
+    ])["selected_container"]
+except KeyboardInterrupt:
+    print(f"{fg.red}Operation cancelled by user.{colors.reset}")
+    exit(0)
 
 
 # Check if the container is running

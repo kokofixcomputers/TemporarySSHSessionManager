@@ -182,16 +182,16 @@ def generate_api_key():
     if authenticated(session):
         conn = sqlite3.connect('containers.db')
         c = conn.cursor()
-        # Make sure the user has not already generated an API key
-        c.execute('SELECT * FROM api_key WHERE user=?', (session['username'],))
-        if c.fetchone() is not None:
-            # Get the user's API Key
-            api = c.execute('SELECT api_key FROM api_key WHERE user=?', (session['username'],)).fetchone()[0]
-            return f"<p>{api}</p>"
-        else:
-            # Generate a new API key
-            new_api_key = "stm_" + str(secrets.token_hex(32))
-            c.execute('INSERT INTO api_key (api_key, user) VALUES (?, ?)', (new_api_key, session['username']))
+        ## Make sure the user has not already generated an API key
+        #c.execute('SELECT * FROM api_key WHERE user=?', (session['username'],))
+        #if c.fetchone() is not None:
+        #    # Get the user's API Key
+        #    api = c.execute('SELECT api_key FROM api_key WHERE user=?', (session['username'],)).fetchone()[0]
+        #    return f"<p>{api}</p>"
+        #else:
+        # Generate a new API key
+        new_api_key = "stm_" + str(secrets.token_hex(32))
+        c.execute('INSERT INTO api_key (api_key, user) VALUES (?, ?)', (new_api_key, session['username']))
         conn.commit()
         conn.close()
         return "<p>" + str(new_api_key) + "</p>"

@@ -198,6 +198,20 @@ def generate_api_key():
     else:
         return "<p>You are not authorized to access this page.</p>"
     
+@app.route('/apikey/delete', methods=['POST'])
+def delete_api_key():
+    if authenticated(session):
+        api_key = request.json.get('api_key')
+        if api_key:
+            conn = sqlite3.connect('containers.db')
+            c = conn.cursor()
+            c.execute('DELETE FROM api_key WHERE api_key=?', (api_key,))
+            conn.commit()
+            conn.close()
+            return "API key deleted successfully."
+        else:
+            return "API key not provided."
+    
 @app.route('/apikey/get')
 def get_api_key():
     if authenticated(session):

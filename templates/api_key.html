@@ -1,22 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SSH Temporary Session Generator - API Key</title>
     <link rel="stylesheet" href="/static/styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>SSH Temporary Session Generator - API Key</h1>
-      <p>Logged in as {{ username }}</p><button id="logoutButton" class="redbutton">Logout</button>
+    <style>
+        /* Table styling */
+        #apiKeysTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
 
-      <button id="generate_key">Generate API Key</button>
+        #apiKeysTable th, #apiKeysTable td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd; /* Light gray border between rows */
+        }
 
-      <div id="messages">
+        #apiKeysTable th {
+            background-color: #4CAF50; /* Green background for header */
+            color: white; /* White text for header */
+            font-weight: bold; /* Bold text for header */
+        }
 
-      </div>
-    </div>
-    <script src="/static/api_key.js"></script>
-  </body>
+        #apiKeysTable tr:nth-child(even) {
+            background-color: #f9f9f9; /* Light gray for even rows */
+        }
+
+        #apiKeysTable tr:hover {
+            background-color: #f1f1f1; /* Slightly darker gray on hover */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>SSH Temporary Session Generator - API Key</h1>
+    <p>Logged in as {{ username }}</p>
+    <button id="logoutButton" class="redbutton">Logout</button>
+    <button id="generate_key">Generate API Key</button>
+
+    <div id="messages"></div>
+
+    <table id="apiKeysTable">
+        <thead>
+            <tr>
+                <th scope="col">API Key</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be populated by JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script src="/static/api_key.js"></script>
+</body>
 </html>

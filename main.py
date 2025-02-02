@@ -198,6 +198,19 @@ def generate_api_key():
     else:
         return "<p>You are not authorized to access this page.</p>"
     
+@app.route('/apikey/get')
+def get_api_key():
+    if authenticated(session):
+        conn = sqlite3.connect('containers.db')
+        c = conn.cursor()
+        # Get all of the user's API Keys
+        c.execute('SELECT api_key FROM api_key WHERE user=?', (session['username'],))
+        api_keys = [row[0] for row in c.fetchall()]
+        conn.close()
+        return jsonify(api_keys)
+    else:
+        return "You are not authorized to access this page."
+    
 @app.route('/apikey/dashboard')
 def api_key_dashboard():
     if authenticated(session):

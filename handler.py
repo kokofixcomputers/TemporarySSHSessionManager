@@ -129,8 +129,7 @@ def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
         return None, None, None, None, None
     time.sleep(5)
     
-    if distro == "ubuntu":
-        start_sshd(container.name)
+    start_sshd(container.name)
 
     return container.name, username, password, port, outsider_port
 

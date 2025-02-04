@@ -75,4 +75,29 @@ curl -o /etc/agent/agent.py {{ url }}/agent/download
 echo "Virtual environment 'venv' created and activated at /etc/venv."
 echo "Downloaded content from {{ url }}/agent/download to /etc/agent/agent.py."
 
+# Define the path to the run file
+RUN_FILE="/run/service/svc-openssh-server/run"
+
+# Erase content of the run file
+echo "" > "$RUN_FILE"
+
+# Set new content to the run file
+cat <<EOL > "$RUN_FILE"
+#!/package/admin/execline/command/execlineb -S0
+
+# Redirect stdout and stderr to a log file (optional)
+/package/admin/execline/command/fdmove 1 0
+/package/admin/s6/command/s6-fdholder-retrieve ../s6rc-fdholder/s "pipe:s6rc-w-log-openssh-server"
+/package/admin/execline/command/fdswap 0 1
+
+# Start the SSH daemon
+exec /usr/sbin/sshd -D -d
+EOL
+
+# Make the run file executable
+chmod +x "$RUN_FILE"
+
+# Run s6-svc to update the service
+s6-svc -u /run/service/svc-openssh-server
+
 echo "Install Script Complete"

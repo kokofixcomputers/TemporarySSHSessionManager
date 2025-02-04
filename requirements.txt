@@ -6,3 +6,4 @@ docker
 waitress
 keyring
 websockets
+paramiko

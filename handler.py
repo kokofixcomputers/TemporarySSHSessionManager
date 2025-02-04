@@ -5,6 +5,7 @@ import docker
 import random
 import string
 import time
+import paramiko
 import distro_handler
 
 # Function to generate a random username from a list of words
@@ -82,6 +83,42 @@ def test_docker_connection():
         return True
     except:
         return False
+    
+def check_ssh_connection(username, hostname, port=22, password=None):
+    """
+    Check if an SSH connection can be established to a server.
+
+    Args:
+        username (str): The username for SSH authentication.
+        hostname (str): The hostname or IP address of the server.
+        port (int): The port number for SSH (default is 22).
+        password (str): The password for SSH authentication.
+
+    Returns:
+        bool: True if connection is successful, False otherwise.
+    """
+    try:
+        # Create an SSH client
+        ssh = paramiko.SSHClient()
+        
+        # Automatically add the server's host key (this is not recommended for production)
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        
+        # Connect to the server
+        ssh.connect(hostname, port=port, username=username, password=password)
+        
+        # If successful, return True
+        return True
+        
+    except paramiko.AuthenticationException:
+        return False
+    except paramiko.SSHException as e:
+        return False
+    except Exception as e:
+        return False
+    finally:
+        # Close the connection if it was established
+        ssh.close()
 
 def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
     username = generate_username(word_list)
@@ -118,7 +155,10 @@ def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
         return None, None, None, None, None
         
     restart_container(container.name)
-    time.sleep(60)
+    can_connect = False
+    while not can_connect:
+        can_connect = check_ssh_connection(username=username, password=password, hostname="localhost", port=port)
+        time.sleep(2)
 
     return container.name, username, password, port, outsider_port
 

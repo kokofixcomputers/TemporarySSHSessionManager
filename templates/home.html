@@ -21,9 +21,12 @@
       {% if authorized %}
         <p>You are authorized to generate SSH sessions.</p>
         <select id="distro-select" name="distro">
-          <option value="alpine">Alpine</option>
-          <option value="ubuntu">Ubuntu</option>
-        </select>
+          {% for key, distro in distros.items() %}
+              <option value="{{ distro.id }}" {% if distro.default %}selected{% endif %}>
+                  {{ distro.name }}
+              </option>
+          {% endfor %}
+        </select>           
         <button id="generateSessionBtn">Generate SSH Session</button>
       {% else %}
         <p>You are not authorized to generate SSH sessions.</p>

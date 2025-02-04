@@ -13,6 +13,7 @@ import configuration_manager
 import secrets
 import printedcolors
 import network_setup
+import distro_handler
 import random
 
 colors = printedcolors.Color
@@ -28,12 +29,25 @@ def debug_print(message, color=""):
 print(colors.fg.cyan + "Temporary SSH Session Manager" + colors.reset)
 print("")
 
-print(colors.fg.lightblue + "Testing Docker Connection..." + colors.reset)
+exit_error = False
+print(colors.fg.lightblue + "Testing Docker Connection..." + colors.reset, end=" ")
 if not handler.test_docker_connection():
-    print(colors.fg.red + "Docker is not running. Please start Docker and try again." + colors.reset)
-    exit(1) # Non-zero exit code indicates an error
+    print(colors.fg.red + "FAIL" + colors.reset)
+    exit_error = True
 else:
-    print(colors.fg.green + "Docker is running. Proceeding with the application." + colors.reset)
+    print(colors.fg.green + "OK" + colors.reset)
+print(colors.fg.lightblue + "Validating distro configuration..." + colors.reset, end=" ")
+try:
+    distro_handler.validate_distros()
+    print(colors.fg.green + "OK" + colors.reset)
+except Exception as e:
+    print(colors.fg.red + "FAIL" + colors.reset)
+    exit_error = True
+    print(colors.fg.red + str(e) + colors.reset)
+    
+if exit_error:
+    print(colors.fg.red + "One or more errors were encountered. Please fix the errors and try again." + colors.reset)
+    exit(1)
 
 network_setup.setup_network()
 
@@ -173,7 +187,7 @@ app.secret_key = config.get()['APP_SECRET']
 @app.route('/')
 def home():
     if authenticated(session):
-        return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']), admin=is_admin(session['username']))
+        return render_template('home.html', username=session['username'], authorized=is_authorized(session['username']), admin=is_admin(session['username']), distros=distro_handler.get_distro_list())
     else:
         return redirect(url_for('auth'))
     
@@ -286,25 +300,16 @@ def get_user_containers_api():
         }
         container_list.append(container_details)
     return jsonify(container_list)
-    
-    
-@app.route('/install/alpine')
-def install_alpine():
-    #if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
-    #    return jsonify({"error": "Unauthorized"}), 401
-    url = request.url_root
-    template = env.get_template('install_script.sh.j2')
-    rendered_script = template.render(url=url) # Render the script.
-    return Response(rendered_script, mimetype='text/plain')
 
-@app.route('/install/ubuntu')
-def install_ubuntu():
-    #if not str(request.args.get('token')) == "stm_NDbBshvFzKZLlOuhY1OPcS": # TODO: add non-static token
-    #    return jsonify({"error": "Unauthorized"}), 401
-    url = request.url_root
-    template = env.get_template('install_script_ubuntu.sh.j2')
-    rendered_script = template.render(url=url) # Render the script.
-    return Response(rendered_script, mimetype='text/plain')
+@app.route('/install/<distro>')
+def install_distro(distro):
+    if distro_handler.validate_distro(distro):
+        url = request.url_root
+        template = env.get_template(distro_handler.get_install_file(distro))
+        rendered_script = template.render(url=url)
+        return Response(rendered_script, mimetype='text/plain')
+    else:
+        return jsonify({"error": "Invalid distro"}), 400
 
 def get_random_port(starting_port=int(config.get()['STARTING_PORT_FOR_CONTAINERS']), ending_port=int(config.get()['ENDING_PORT_FOR_CONTAINERS'])):
     # Connect to the SQLite database

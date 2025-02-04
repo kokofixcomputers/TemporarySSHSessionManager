@@ -5,3 +5,4 @@ flask
 docker
 waitress
 keyring
+websockets

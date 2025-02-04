@@ -7,6 +7,10 @@ import string
 import time
 import paramiko
 import distro_handler
+import logging
+paramiko_logger = logging.getLogger("paramiko")
+paramiko_logger.addHandler(logging.NullHandler())
+
 
 # Function to generate a random username from a list of words
 def generate_username(word_list, length=2):
@@ -114,7 +118,7 @@ def check_ssh_connection(username, hostname, port=22, password=None):
         return False
     except paramiko.SSHException as e:
         return False
-    except Exception as e:
+    except:
         return False
     finally:
         # Close the connection if it was established

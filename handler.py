@@ -116,7 +116,7 @@ def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
         )
     except:
         return None, None, None, None, None
-    time.sleep(3)
+    time.sleep(10)
     
     restart_container(container.name)
 

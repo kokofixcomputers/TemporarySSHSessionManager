@@ -82,17 +82,6 @@ def test_docker_connection():
         return True
     except:
         return False
-    
-def start_sshd(container_name):
-    try:
-        client = docker.from_env()
-        container = client.containers.get(container_name)
-        container.exec_run("service ssh start")
-    except docker.errors.NotFound:
-        return True # No such container. May have been removed already. Return True to update database.
-    except:
-        return None
-    return True
 
 def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
     username = generate_username(word_list)
@@ -127,9 +116,9 @@ def create_container(web_dashboard_host, port, outsider_port, distro="alpine"):
         )
     except:
         return None, None, None, None, None
-    time.sleep(5)
+    time.sleep(3)
     
-    start_sshd(container.name)
+    restart_container(container.name)
 
     return container.name, username, password, port, outsider_port
 
@@ -139,7 +128,6 @@ def restart_container(name):
         container = client.containers.get(name)
         container.restart()
         time.sleep(1)
-        start_sshd(name)
     except docker.errors.NotFound:
         return True # No such container. May have been removed already. Return True to update database.
     except:
@@ -163,7 +151,6 @@ def start_container(name):
         container = client.containers.get(name)
         container.start()
         time.sleep(1)
-        start_sshd(name)
     except docker.errors.NotFound:
         return True # No such container. May have been removed already. Return True to update database.
     except:

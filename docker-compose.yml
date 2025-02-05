@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Mounting the Docker socket
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock  # Optional, usually not needed

@@ -8,7 +8,7 @@ import time
 import paramiko
 import distro_handler
 import logging
-paramiko_logger = logging.getLogger("paramiko")
+paramiko_logger = logging.getLogger("paramiko.transport")
 paramiko_logger.addHandler(logging.NullHandler())
 
 

@@ -19,6 +19,9 @@ COPY . .
 RUN useradd -ms /bin/bash stmuser && \
     usermod -aG docker stmuser  # Add the user to the docker group
 
+RUN groupadd -g 994 docker && \
+    useradd -ms /bin/bash -g docker stmuser
+
 USER stmuser
 
 CMD ["python", "main.py"]

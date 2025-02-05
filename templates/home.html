@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SSH Temporary Session Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css" />
     <link rel="stylesheet" href="/static/confirmationModal.css" />
@@ -75,9 +76,7 @@
         <center>
           <p class="restart-text">Creating Container...</p>
           <p>This might take a while.</p>
-          <div class="progress-bar">
-            <div class="progress" id="myProgress" data-size="0"></div>
-          </div>
+          <progress class="progress is-info" id="myProgress" value="0" max="100">0%</progress>
           <script>
             const progressBar = document.getElementById("myProgress");
             let width = 0;
@@ -88,10 +87,11 @@
             const id = setInterval(() => {
                 if (width >= 100) {
                     clearInterval(id); // Stop when it reaches or exceeds 100%
+                    progressBar.value = 100; // Ensure it shows 100% at the end
                 } else {
                     width += increment; // Increment the width
-                    progressBar.style.width = `${width}%`; // Update the width of the progress bar
-                    progressBar.setAttribute("data-size", Math.round(width)); // Update data-size attribute for accessibility
+                    progressBar.value = Math.round(width); // Update the value of the progress bar
+                    progressBar.innerText = `${Math.round(width)}%`; // Update inner text for accessibility
                 }
             }, intervalTime);
           </script>

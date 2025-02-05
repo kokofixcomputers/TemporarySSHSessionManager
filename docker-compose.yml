@@ -7,3 +7,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock  # Mounting the Docker socket
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock  # Optional, usually not needed
+
+    group_add:
+      - "944"

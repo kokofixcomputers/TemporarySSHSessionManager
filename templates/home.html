@@ -78,23 +78,6 @@
           <div class="progress-bar">
             <div class="progress" id="myProgress" data-size="0"></div>
           </div>
-          <script>
-            const progressBar = document.getElementById("myProgress");
-            let width = 0;
-            const duration = 70000; // Duration in milliseconds (70 seconds)
-            const intervalTime = 100; // Update every 100 milliseconds
-            const increment = (intervalTime / duration) * 100; // Calculate the increment for each interval
-
-            const id = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(id); // Stop when it reaches or exceeds 100%
-                } else {
-                    width += increment; // Increment the width
-                    progressBar.style.width = `${width}%`; // Update the width of the progress bar
-                    progressBar.setAttribute("data-size", Math.round(width)); // Update data-size attribute for accessibility
-                }
-            }, intervalTime);
-          </script>
           <div class="spinner"></div>
         </center>
 

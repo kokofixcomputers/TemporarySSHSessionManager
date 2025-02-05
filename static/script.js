@@ -23,10 +23,10 @@ function openModal() {
         const duration = 70000; // Duration in milliseconds (70 seconds)
         const intervalTime = 100; // Update every 100 milliseconds
         const increment = (intervalTime / duration) * 100; // Calculate the increment for each interval
+        progressBar.style.width = `0%`; // Update the width of the progress bar
+        progressBar.setAttribute("data-size", Math.round(0)); // Update data-size attribute for accessibility
 
         const id = setInterval(() => {
-                progressBar.style.width = `0%`; // Update the width of the progress bar
-                progressBar.setAttribute("data-size", Math.round(0)); // Update data-size attribute for accessibility
                 width += increment; // Increment the width
                 progressBar.style.width = `${width}%`; // Update the width of the progress bar
                 progressBar.setAttribute("data-size", Math.round(width)); // Update data-size attribute for accessibility

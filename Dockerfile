@@ -16,7 +16,9 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Create a non-root user
-RUN useradd -ms /bin/bash stmuser
+RUN useradd -ms /bin/bash stmuser && \
+    usermod -aG docker stmuser  # Add the user to the docker group
+
 USER stmuser
 
 CMD ["python", "main.py"]

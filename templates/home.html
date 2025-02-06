@@ -16,8 +16,14 @@
       <p>Logged in as {{ username }}</p>
       {% if admin %}
       <br>
-      <a href="/admin">Admin Panel</a><br>
-      <a href="/apikey/dashboard">API Key</a><br>
+      <a href="/admin" class="btn btn-primary"
+        style="--cui-btn-padding-y: .25rem; --cui-btn-padding-x: .5rem; --cui-btn-font-size: .75rem;">
+        Admin Panel
+      </a><br>
+      <a href="/apikey/dashboard" class="btn btn-primary"
+        style="--cui-btn-padding-y: .25rem; --cui-btn-padding-x: .5rem; --cui-btn-font-size: .75rem;">
+        API Key
+      </a><br>
       {% endif %}
       <button id="logoutButton" class="btn btn-danger">Logout</button>
       {% if authorized %}

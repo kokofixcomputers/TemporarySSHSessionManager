@@ -215,20 +215,20 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
       containers.forEach(container => {
         html += `
               <li>
-    <h3>Session Details:</h3>
+    <h4>Session Details:</h4><br>
     <p><strong>Name:</strong> ${container.name}</p><br>
     <p><strong>Username:</strong> ${container.username}</p><br>
     <p><strong>Password:</strong> ${container.password}</p><br>
     <p><strong>Hostname:</strong> ${container.hostname}</p><br>
     <p><strong>Port:</strong> ${container.port}</p><br>
     <div class="button-container">
-      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
-      <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+      <button id="delete-btn-${container.name}" class="delete-btn btn btn-danger btn-mdsm">Delete</button>
+      <button id="restart-btn-${container.name}" class="restart-btn btn btn-warning btn-mdsm" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
+      <button class="connect-btn btn btn-primary btn-mdsm" id="connect-btn-${container.name}">Connect</button>
     </div>
     <div class="button-container">
-      <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
-      <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
+      <button id="start-btn-${container.name}" class="start-btn btn btn-success btn-mdsm" ${container.active === 0 ? '' : 'disabled'}>Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn btn btn-danger btn-mdsm" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
   </li>`;
       });
@@ -280,20 +280,20 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           data.forEach(container => {
             html += `
               <li>
-    <h3>Session Details:</h3>
+    <h4>Session Details:</h4><br>
     <p><strong>Name:</strong> ${container.name}</p>
     <p><strong>Username:</strong> ${container.username}</p>
     <p><strong>Password:</strong> ${container.password}</p>
     <p><strong>Hostname:</strong> ${container.hostname}</p>
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
-      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
-      <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+      <button id="delete-btn-${container.name}" class="delete-btn btn btn-danger btn-mdsm">Delete</button>
+      <button id="restart-btn-${container.name}" class="restart-btn btn btn-warning btn-mdsm" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
+      <button class="connect-btn btn btn-primary btn-mdsm" id="connect-btn-${container.name}">Connect</button>
     </div>
     <div class="button-container">
-      <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
-      <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
+      <button id="start-btn-${container.name}" class="start-btn btn btn-success btn-mdsm" ${container.active === 0 ? '' : 'disabled'}>Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn btn btn-danger btn-mdsm" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
   </li>`;
             const containernametodelete = container.name;
@@ -350,20 +350,20 @@ document.getElementById('generateSessionBtn').addEventListener('click', function
           data.forEach(container => {
             html += `
   <li>
-    <h3>Session Details:</h3>
+    <h4>Session Details:</h4><br>
     <p><strong>Name:</strong> ${container.name}</p>
     <p><strong>Username:</strong> ${container.username}</p>
     <p><strong>Password:</strong> ${container.password}</p>
     <p><strong>Hostname:</strong> ${container.hostname}</p>
     <p><strong>Port:</strong> ${container.port}</p>
     <div class="button-container">
-      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
-      <button id="restart-btn-${container.name}" class="restart-btn" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
-      <button class="connect-btn" id="connect-btn-${container.name}">Connect</button>
+      <button id="delete-btn-${container.name}" class="delete-btn btn btn-danger btn-mdsm">Delete</button>
+      <button id="restart-btn-${container.name}" class="restart-btn btn btn-warning btn-mdsm" ${container.active === 1 ? '' : 'disabled'}>Restart</button>
+      <button class="connect-btn btn btn-primary btn-mdsm" id="connect-btn-${container.name}">Connect</button>
     </div>
     <div class="button-container">
-      <button id="start-btn-${container.name}" class="start-btn" ${container.active === 0 ? '' : 'disabled'}>Start</button>
-      <button id="stop-btn-${container.name}" class="stop-btn" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
+      <button id="start-btn-${container.name}" class="start-btn btn btn-success btn-mdsm" ${container.active === 0 ? '' : 'disabled'}>Start</button>
+      <button id="stop-btn-${container.name}" class="stop-btn btn btn-danger btn-mdsm" ${container.active === 1 ? '' : 'disabled'}>Stop</button>
     </div>
   </li>`;
 

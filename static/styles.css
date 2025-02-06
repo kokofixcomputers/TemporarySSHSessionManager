@@ -33,105 +33,6 @@
     margin-bottom: 20px;
   }
   
-  button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-
-  .start-btn {
-    padding: 10px 20px;
-    background-color: #28a745 !important; /* Green */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .start-btn:hover {
-    background-color: #218838 !important; /* Darker green */
-  }
-  .start-btn:disabled {
-    background-color: #c0c0c0; /* Gray background for disabled state */
-    color: #444444; /* Darker text color for visibility */
-    cursor: not-allowed; /* Change cursor to indicate non-interactivity */
-    opacity: 0.6; /* Slightly transparent to indicate disabled state */
-  }
-
-  .stop-btn {
-    padding: 10px 20px;
-    background-color: #dc3545 !important; /* Red */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .stop-btn:hover {
-    background-color: #c82333 !important; /* Darker red */
-  }
-  .stop-btn:disabled {
-    background-color: #c0c0c0; /* Gray background for disabled state */
-    color: #444444; /* Lighter text color for visibility */
-    cursor: not-allowed; /* Change cursor to indicate non-interactivity */
-    opacity: 0.6; /* Slightly transparent to indicate disabled state */
-  }
-
-
-  button:disabled {
-    background-color: #c0c0c0; /* Gray background for disabled state */
-    color: #444444; /* Lighter text color for visibility */
-    cursor: not-allowed; /* Change cursor to indicate non-interactivity */
-    opacity: 0.6; /* Slightly transparent to indicate disabled state */
-  }
-
-  .restart-btn {
-    padding: 10px 20px;
-    background-color: #ffcc00 !important; /* Bright yellow */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .restart-btn:hover {
-      background-color: #ffb300 !important; /* Darker yellow/orange */
-  }
-
-  .redbutton {
-    padding: 10px 20px;
-    background-color: #ff5e5e !important;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .redbutton:hover {
-    background-color: #ff3d3d !important;
-  }
-
-  .delete-btn {
-    padding: 10px 20px;
-    background-color: #ff5e5e !important;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .delete-btn:hover {
-    background-color: #ff3d3d !important;
-  }
-  
   .result {
     margin-top: 20px;
     padding: 10px;
@@ -269,6 +170,21 @@
     display: flex; /* Use flexbox for centering */
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
+  }
+
+  .btn-danger {
+    color: white !important;
+  }
+
+  .btn-warning {
+    color: white !important;
+  }
+
+  .btn-mdsm {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    border-radius: 0.5rem !important; 
   }
 
   .tooltip-content {

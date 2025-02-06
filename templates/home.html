@@ -4,20 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SSH Temporary Session Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui-pro@5.9.0/dist/css/coreui.min.css" rel="stylesheet" integrity="sha384-Ve7hQpTs/xy/JZqnD4/SWFwF0wi2txt/YGb48ABl4PnkLahmKdTS0EMBgFX2v4Hr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui-pro@5.9.0/dist/js/coreui.bundle.min.js" integrity="sha384-XdSQk/ZjKuv9tj9ytdSleLWzwx2LfqEmk1fS0MI6SdZvPSU+h+G09HaUNTEbR5m5" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css" />
     <link rel="stylesheet" href="/static/confirmationModal.css" />
   </head>
   <body>
     <div class="container">
-      <h1>SSH Temporary Session Generator</h1>
+      <h2>SSH Temporary Session Generator</h2>
       <p>Logged in as {{ username }}</p>
       {% if admin %}
       <br>
       <a href="/admin">Admin Panel</a><br>
       <a href="/apikey/dashboard">API Key</a><br>
       {% endif %}
-      <button id="logoutButton" class="redbutton">Logout</button>
+      <button id="logoutButton" class="btn btn-danger">Logout</button>
       {% if authorized %}
         <p>You are authorized to generate SSH sessions.</p>
         <select id="distro-select" name="distro">
@@ -27,7 +29,7 @@
               </option>
           {% endfor %}
         </select>           
-        <button id="generateSessionBtn">Generate SSH Session</button>
+        <button class="btn btn-primary" id="generateSessionBtn">Generate SSH Session</button>
       {% else %}
         <p>You are not authorized to generate SSH sessions.</p>
         <p>Please contact an administrator to request access.</p>
@@ -51,8 +53,8 @@
           <h2>Confirmation</h2>
           <p></p> <!-- This will be filled by confirmModal -->
           <div class="button-group">
-              <button id="okBtn" class="modern-btn primary">OK</button>
-              <button id="cancelBtn" class="modern-btn secondary">Cancel</button>
+              <button id="okBtn" class="btn btn-success btn-mdsm">OK</button>
+              <button id="cancelBtn" class="btn btn-danger btn-mdsm">Cancel</button>
           </div>
       </div>
     </div>

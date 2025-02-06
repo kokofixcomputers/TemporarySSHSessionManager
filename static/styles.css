@@ -188,6 +188,10 @@
     font-weight: bold !important;
   }
 
+  h1 {
+    font-size: 2em; /* Increase font size */
+  }
+
   .btn-mdsm {
     padding: 0.4rem 0.75rem !important;
     font-size: 0.9rem !important;

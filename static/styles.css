@@ -180,6 +180,10 @@
     color: white !important;
   }
 
+  .btn-success {
+    color: white !important;
+  }
+
   .btn-mdsm {
     padding: 0.4rem 0.75rem !important;
     font-size: 0.9rem !important;

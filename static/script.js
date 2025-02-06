@@ -532,10 +532,7 @@ function openConnectionPopup(containerId) {
                 </div>
                 <strong>Active?</strong> ${data.active ? 'Yes' : 'No'}<br>
                 <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
-
-                <br><br>
-                This may eventually be a issue with connecting to the container because it keeps adding to your known_hosts file. 
-                To avoid that, you can run <code>alias sshnohost='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'</code> and then use sshnohost instead of ssh. This way, it won't add to your known_hosts file.
+                <strong>Client Command:</strong> <code>python customclient.py ${data.name}</code>
 
             `;
             // Show the popup

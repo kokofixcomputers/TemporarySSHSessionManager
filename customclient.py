@@ -20,6 +20,7 @@ if api_key is None:
 parser = argparse.ArgumentParser(description="Process some options.", add_help=False)
 
 parser.add_argument('--credential-reset', action='store_true', help='Reset credentials')
+parser.add_argument('container', nargs='?', default=None, help='The optional token argument')
 
 args = parser.parse_args()
 if getattr(args, 'credential_reset'):
@@ -38,6 +39,16 @@ if containers.status_code == 404:
     exit(1)
 containers = containers.json()
 
+container_connect = args.container
+
+if container_connect:
+    container_info = next((container for container in containers if container["name"] == container_connect), None)
+    if not container_info:
+        print(f"{fg.red}Container '{container_connect}' not found.{colors.reset}")
+        exit(1)
+    print("Connecting to container: ", container_info["name"])
+    os.system(f"ssh -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {container_info['username']}@{container_info['hostname']} -p {container_info['port']}")
+    exit(0)
 
 choices = [Choice(name=f"{container['name']} ({container['username']}@{container['hostname']})", value=container) for container in containers if container['active'] == 1]
 try:
@@ -61,4 +72,4 @@ container_info = next((container for container in containers if container["name"
 
 print("Connecting to container: ", container_info["name"])
 
-os.system(f"ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {container_info['username']}@{container_info['hostname']} -p {container_info['port']}")
+os.system(f"ssh -o LogLevel=ERROR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {container_info['username']}@{container_info['hostname']} -p {container_info['port']}")

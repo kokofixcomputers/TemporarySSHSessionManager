@@ -43,7 +43,7 @@ function fetchApiKeys() {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${apiKey}</td>
-                    <td><button class="redbutton delete-button" data-api-key="${apiKey}">Delete</button></td>
+                    <td><button class="btn btn-danger delete-button" data-api-key="${apiKey}">Delete</button></td>
                 `;
                 tableBody.appendChild(row);
             });

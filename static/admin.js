@@ -29,7 +29,7 @@ document.getElementById('delete_session_button').addEventListener('click', funct
       containers.forEach(container => {
         html += `<li>
                   <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                  <button id="delete-btn-${container.id}" class="delete-btn">Delete</button>
+                  <button id="delete-btn-${container.id}" class="delete-btn btn btn-danger">Delete</button>
                 </li>`;
       });
       html += '</ul>';
@@ -59,7 +59,7 @@ document.getElementById('delete_session_button').addEventListener('click', funct
           data.forEach(container => {
             html += `<li>
                       <strong>Name:</strong> ${container.name}, <strong>Username:</strong> ${container.username}, <strong>Port:</strong> ${container.port}, <strong>Password:</strong> ${container.password},
-                      <button id="delete-btn-${container.name}" class="delete-btn">Delete</button>
+                      <button id="delete-btn-${container.name}" class="delete-btn btn btn-danger">Delete</button>
                     </li>`;
             const containernametodelete = container.name;
           });

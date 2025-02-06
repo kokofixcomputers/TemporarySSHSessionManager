@@ -531,7 +531,7 @@ function openConnectionPopup(containerId) {
                     </div>
                 </div>
                 <strong>Active?</strong> ${data.active ? 'Yes' : 'No'}<br>
-                <strong>SSH Command:</strong> <code>${data.ssh_command}</code>
+                <strong>SSH Command:</strong> <code>${data.ssh_command}</code><br>
                 <strong>Client Command:</strong> <code>python customclient.py ${data.name}</code>
 
             `;

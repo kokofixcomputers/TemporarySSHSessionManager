@@ -4,12 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SSH Temporary Session Generator - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui-pro@5.9.0/dist/css/coreui.min.css" rel="stylesheet" integrity="sha384-Ve7hQpTs/xy/JZqnD4/SWFwF0wi2txt/YGb48ABl4PnkLahmKdTS0EMBgFX2v4Hr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui-pro@5.9.0/dist/js/coreui.bundle.min.js" integrity="sha384-XdSQk/ZjKuv9tj9ytdSleLWzwx2LfqEmk1fS0MI6SdZvPSU+h+G09HaUNTEbR5m5" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <div class="container">
       <h1>SSH Temporary Session Generator</h1>
-      <p>Logged in as {{ username }}</p><button id="logoutButton" class="redbutton">Logout</button>
+      <p>Logged in as {{ username }}</p><button id="logoutButton" class="btn btn-danger">Logout</button>
 
       <div id="containers" class="result">
         <h3>All Containers:</h3>
@@ -17,7 +19,7 @@
       <br>
       <div id="admin_actions" class="actions">
         <h3>Admin Actions:</h3>
-        <button id="delete_session_button" class="redbutton">Delete all Login Session on the panel (this will logout all users and admins including you!)</button>
+        <button id="delete_session_button" class="btn btn-danger">Delete all Login Session on the panel (this will logout all users and admins including you!)</button>
         <div id="messages">
 
         </div>
